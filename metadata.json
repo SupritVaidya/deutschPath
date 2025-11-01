@@ -1,0 +1,7 @@
+{
+  "name": "DeutschPath: Adaptive German Learning",
+  "description": "An adaptive web application for learning German from A1 to C2. It features structured learning paths, progress tracking, and real-time conversation practice with an AI tutor.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
