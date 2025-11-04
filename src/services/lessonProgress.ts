@@ -1,12 +1,12 @@
 export async function fetchLessonCompletionStatus(userId: string, lessonId: string) {
-  const resp = await fetch(`https://localhost:7114/api/LessonProgresses?userId=${userId}&lessonId=${lessonId}`);
+  const resp = await fetch(`https://deutschpath-euhufrdpdcbreqfg.uksouth-01.azurewebsites.net/api/LessonProgresses?userId=${userId}&lessonId=${lessonId}`);
   if (!resp.ok) throw new Error('Failed to fetch lesson completion status');
   const progresses = await resp.json();
   // If any record exists, lesson is completed
   return Array.isArray(progresses) && progresses.length > 0;
 }
 export async function calculateLessonProgress(userId: string) {
-  const resp = await fetch(`https://localhost:7114/api/LessonProgresses/calculate/${userId}`);
+  const resp = await fetch(`https://deutschpath-euhufrdpdcbreqfg.uksouth-01.azurewebsites.net/api/LessonProgresses/calculate/${userId}`);
   if (!resp.ok) throw new Error('Failed to fetch lesson progress');
   return await resp.json();
 }
@@ -29,7 +29,7 @@ export async function markLessonComplete(userId: string, lessonId: string) {
     completedAt: new Date().toISOString()
   };
   console.log('Sending lesson complete request:', payload);
-  const resp = await fetch('https://localhost:7114/api/LessonProgresses', {
+  const resp = await fetch('https://deutschpath-euhufrdpdcbreqfg.uksouth-01.azurewebsites.net/api/LessonProgresses', {
     method: 'POST',
     headers: {
       'Authorization': `Bearer ${token}`,
