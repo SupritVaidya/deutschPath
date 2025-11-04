@@ -22,6 +22,12 @@ builder.Services.AddCors(options =>
               .AllowAnyMethod()
               .AllowCredentials();
     });
+    options.AddPolicy("AllowGithubPages", policy =>
+    {
+        policy.WithOrigins("https://supritvaidya.github.io")
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
 });
 
 builder.Services.AddControllers();
@@ -114,6 +120,13 @@ using (var scope = app.Services.CreateScope())
 }
 // ---------- END DEV SEED ----------
 
-app.UseCors("AllowDevFrontends");
+if (app.Environment.IsDevelopment())
+{
+    app.UseCors("AllowDevFrontends");
+}
+else
+{
+    app.UseCors("AllowGithubPages");
+}
 
 app.Run();
