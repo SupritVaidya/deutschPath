@@ -1,7 +1,7 @@
 // src/services/courses.ts
+import { API_URL } from "../lib/api";
 export async function fetchCourses(token: string) {
-  const resp = await fetch("https://localhost:7114/api/courses", {
-  //const resp = await fetch("https://deutschpath-euhufrdpdcbreqfg.uksouth-01.azurewebsites.net/api/courses", {
+  const resp = await fetch(`${API_URL}/api/courses`, {
     headers: {
       "Authorization": `Bearer ${token}`,
       "Content-Type": "application/json"

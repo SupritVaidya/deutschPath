@@ -1,5 +1,6 @@
 // src/lib/api.ts
-const API_BASE = (import.meta.env.VITE_API_BASE as string) || "http://localhost:5000";
+export const API_URL = (import.meta.env.VITE_API_BASE as string) || "https://localhost:7114";
+//export const API_URL = (import.meta.env.VITE_API_BASE as string) || "https://deutschpath-euhufrdpdcbreqfg.uksouth-01.azurewebsites.net";
 
 export type FetchOptions = RequestInit & { auth?: boolean };
 
@@ -10,7 +11,7 @@ export type FetchOptions = RequestInit & { auth?: boolean };
  * - Handles 401 by clearing local auth and redirecting to /login
  */
 export default async function apiFetch(path: string, options: FetchOptions = {}) {
-  const url = path.startsWith("http") ? path : `${API_BASE}${path.startsWith("/") ? "" : "/"}${path}`;
+  const url = path.startsWith("http") ? path : `${API_URL}${path.startsWith("/") ? "" : "/"}${path}`;
 
   const headers = new Headers(options.headers ?? { "Content-Type": "application/json" });
 
