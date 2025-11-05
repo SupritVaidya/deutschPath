@@ -8,6 +8,9 @@ using DeutschPath.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Force listening URL:(only for dev)
+//builder.WebHost.UseUrls("https://localhost:7114");
+
 // DbContext (reads DefaultConnection from appsettings.json)
 builder.Services.AddDbContext<DeutschPathDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
