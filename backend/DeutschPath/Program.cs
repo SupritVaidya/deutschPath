@@ -23,12 +23,12 @@ builder.Services.AddCors(options =>
               .AllowCredentials();
     });
     //Enable for production GitHub Pages hosting
-    // options.AddPolicy("AllowGithubPages", policy =>
-    // {
-    //     policy.WithOrigins("https://supritvaidya.github.io")
-    //           .AllowAnyHeader()
-    //           .AllowAnyMethod();
-    // });
+    options.AddPolicy("AllowGithubPages", policy =>
+    {
+        policy.WithOrigins("https://supritvaidya.github.io")
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
 });
 
 builder.Services.AddControllers();
@@ -78,7 +78,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-//app.UseCors("AllowViteDev");
+app.UseCors("AllowViteDev");
 
 if (app.Environment.IsDevelopment())
 {
