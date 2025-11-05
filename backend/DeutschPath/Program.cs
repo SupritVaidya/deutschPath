@@ -22,12 +22,13 @@ builder.Services.AddCors(options =>
               .AllowAnyMethod()
               .AllowCredentials();
     });
-    options.AddPolicy("AllowGithubPages", policy =>
-    {
-        policy.WithOrigins("https://supritvaidya.github.io")
-              .AllowAnyHeader()
-              .AllowAnyMethod();
-    });
+    //Enable for production GitHub Pages hosting
+    // options.AddPolicy("AllowGithubPages", policy =>
+    // {
+    //     policy.WithOrigins("https://supritvaidya.github.io")
+    //           .AllowAnyHeader()
+    //           .AllowAnyMethod();
+    // });
 });
 
 builder.Services.AddControllers();
@@ -77,7 +78,16 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseCors("AllowViteDev");
+//app.UseCors("AllowViteDev");
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseCors("AllowDevFrontends");
+}
+else
+{
+    app.UseCors("AllowGithubPages");
+}
 
 app.UseAuthentication();
 app.UseAuthorization();
@@ -120,13 +130,6 @@ using (var scope = app.Services.CreateScope())
 }
 // ---------- END DEV SEED ----------
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseCors("AllowDevFrontends");
-}
-else
-{
-    app.UseCors("AllowGithubPages");
-}
+
 
 app.Run();

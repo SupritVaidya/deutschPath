@@ -1,5 +1,5 @@
 // src/services/auth.ts
-import apiFetch from "../lib/api";
+import apiFetch, { API_URL } from "../lib/api";
 
 export type User = {
   id: string | number;
@@ -16,7 +16,7 @@ type LoginResponse = {
 };
 
 export async function signup(name: string, email: string, password: string): Promise<User> {
-  const resp = await apiFetch("https://deutschpath-euhufrdpdcbreqfg.uksouth-01.azurewebsites.net/api/Users", {
+  const resp = await apiFetch(`${API_URL}/api/Users`, {
     method: "POST",
     body: JSON.stringify({ name, email, password }),
     auth: false
@@ -37,7 +37,7 @@ export async function signup(name: string, email: string, password: string): Pro
 }
 
 export async function login(email: string, password: string): Promise<User> {
-  const resp = await apiFetch("https://deutschpath-euhufrdpdcbreqfg.uksouth-01.azurewebsites.net/api/auth/login", {
+  const resp = await apiFetch(`${API_URL}/api/auth/login`, {
     method: "POST",
     body: JSON.stringify({ email, password }),
     auth: false
