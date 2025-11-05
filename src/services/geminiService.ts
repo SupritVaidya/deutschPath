@@ -94,7 +94,7 @@ export const getAIAssistantResponse = async (
 };
 
 export const generateSpeech = async (text: string): Promise<string | null> => {
-    const apiKey = process.env.API_KEY;
+    const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
     if (!apiKey) {
         console.warn("API_KEY is not set for TTS. Speech generation is disabled.");
         return null;
