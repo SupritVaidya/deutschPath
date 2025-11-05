@@ -8,35 +8,39 @@ using DeutschPath.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Force listening URL:(only for dev)
-//builder.WebHost.UseUrls("https://localhost:7114");
+// Force listening URL (HTTPS only) — dev only
+// Note: Ensure dev cert is trusted (dotnet dev-certs https --trust)
+builder.WebHost.UseUrls("https://localhost:7114");
 
 // DbContext (reads DefaultConnection from appsettings.json)
 builder.Services.AddDbContext<DeutschPathDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// CORS for Vite dev server
+// CORS: allow only the single dev origin for HTTPS 7114
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowDevFrontends", policy =>
     {
         policy.WithOrigins(
-            "http://localhost:5173",
-            "http://localhost:3000",
-            "https://localhost:5173",
-            "https://localhost:3000"
+            "https://localhost:7114",   // backend swagger / https
+            "http://localhost:3000",    // React (create-react-app) dev server
+            "http://localhost:5173",    // Vite dev server (if you use it)
+            "https://localhost:3000",
+            "https://localhost:5173"
         )
         .AllowAnyHeader()
         .AllowAnyMethod()
-        .AllowCredentials();
+        .AllowCredentials(); // keep if you need cookies; remove if not
     });
-    //Enable for production GitHub Pages hosting
-    // options.AddPolicy("AllowGithubPages", policy =>
-    // {
-    //     policy.WithOrigins("https://supritvaidya.github.io")
-    //           .AllowAnyHeader()
-    //           .AllowAnyMethod();
-    // });
+
+
+    // production policy (GitHub pages) — keep as-is
+    options.AddPolicy("AllowGithubPages", policy =>
+    {
+        policy.WithOrigins("https://supritvaidya.github.io")
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
 });
 
 builder.Services.AddControllers();
@@ -86,8 +90,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-//app.UseCors("AllowViteDev");
-
+// Apply the single dev CORS policy in development, production uses GitHub policy
 if (app.Environment.IsDevelopment())
 {
     app.UseCors("AllowDevFrontends");
@@ -137,7 +140,5 @@ using (var scope = app.Services.CreateScope())
     }
 }
 // ---------- END DEV SEED ----------
-
-
 
 app.Run();
