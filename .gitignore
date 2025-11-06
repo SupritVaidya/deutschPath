@@ -28,3 +28,4 @@ dist-ssr
 backend/DeutschPath/.vs/
 backend/DeutschPath/bin/
 backend/DeutschPath/obj/
+/backend/DeutschPath/publish
