@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useRef } from 'react';
 import { Lesson, Activity, ActivityType, CEFRLevel } from '../../types';
-import { ArrowLeftIcon, LanguagesIcon, PlayIcon, PauseIcon, Loader2Icon, CheckCircleIcon, TargetIcon } from './icons';
+import { ArrowLeftIcon, LanguagesIcon, PlayIcon, PauseIcon, Loader2Icon, CheckCircleIcon, XIcon, TargetIcon } from './icons';
 import ConversationPractice from './ConversationPractice';
 import AssessmentView from './AssessmentView';
 import { generateSpeech } from '../services/geminiService';
@@ -14,121 +14,15 @@ interface LessonViewProps {
   onCompleteActivity: (activityId: string) => void;
 }
 
-const GrammarQuiz: React.FC<{ activity: Activity, onComplete: () => void }> = ({ activity, onComplete }) => {
-    const questions = activity.questions || [];
-    const [answers, setAnswers] = useState<Record<string, string>>({});
-    const [isSubmitted, setIsSubmitted] = useState(false);
-
-    const score = Object.entries(answers).reduce((total, [questionId, answer]) => {
-      const question = questions.find(q => q.id === questionId);
-      return question && question.correctAnswer === answer ? total + 1 : total;
-    }, 0);
-    
-    const allAnswered = Object.keys(answers).length === questions.length;
-    const passed = score / questions.length >= 0.8;
-
-    const handleSubmit = () => {
-        setIsSubmitted(true);
-        if (score / questions.length >= 0.8) {
-            onComplete();
-        }
-    };
-    
-    const handleRetry = () => {
-        setAnswers({});
-        setIsSubmitted(false);
-    };
-
-    if (activity.isCompleted) {
-        return (
-            <div className="pt-4 mt-4 border-t border-base-200">
-                <div className="flex items-center gap-2 p-3 rounded-lg bg-green-100 text-green-700 font-semibold">
-                    <CheckCircleIcon className="h-5 w-5" />
-                    Exercise Completed
-                </div>
-            </div>
-        );
-    }
-
-    return (
-        <div className="pt-4 mt-4 border-t border-base-200">
-            <h5 className="font-semibold text-text-primary mb-4">Exercise: Choose the correct option</h5>
-            <div className="space-y-6">
-                {questions.map((q, index) => (
-                    <div key={q.id}>
-                        <p className="font-medium text-text-primary" dangerouslySetInnerHTML={{ __html: `${index + 1}. ${q.text}`}} />
-                        <div className="mt-2 space-y-2">
-                            {q.options.map(option => {
-                                const isSelected = answers[q.id] === option;
-                                const isCorrect = q.correctAnswer === option;
-                                
-                                let buttonClass = 'border-base-300 hover:border-secondary';
-                                if (isSubmitted) {
-                                    if (isSelected && isCorrect) buttonClass = 'border-green-500 bg-green-50 text-green-800';
-                                    else if (isSelected && !isCorrect) buttonClass = 'border-red-500 bg-red-50 text-red-800';
-                                    else if (isCorrect) buttonClass = 'border-green-500 bg-green-50';
-                                    else buttonClass = 'border-base-300 text-text-secondary';
-                                } else if (isSelected) {
-                                    buttonClass = 'border-primary bg-blue-50';
-                                }
-
-                                return (
-                                    <button
-                                        key={option}
-                                        onClick={() => !isSubmitted && setAnswers(prev => ({ ...prev, [q.id]: option }))}
-                                        className={`w-full p-3 text-left rounded-lg border-2 transition-all duration-200 ${isSubmitted ? 'cursor-default' : ''} ${buttonClass}`}
-                                    >
-                                        {option}
-                                    </button>
-                                );
-                            })}
-                        </div>
-                         {isSubmitted && answers[q.id] !== q.correctAnswer && (
-                            <div className="flex items-center gap-2 mt-2 text-sm text-blue-600">
-                                <TargetIcon className="h-4 w-4" />
-                                <span>Correct answer: {q.correctAnswer}</span>
-                            </div>
-                        )}
-                    </div>
-                ))}
-            </div>
-            <div className="mt-6 pt-4 border-t border-base-200">
-                {!isSubmitted ? (
-                    <button 
-                        onClick={handleSubmit} 
-                        disabled={!allAnswered}
-                        className="w-full bg-primary hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition-colors duration-300 disabled:bg-gray-400"
-                    >
-                        Check Answers
-                    </button>
-                ) : (
-                    <div className="text-center p-4 rounded-lg bg-base-200">
-                        <p className="text-lg font-bold">Your score: {score} / {questions.length}</p>
-                        {passed ? (
-                            <p className="mt-2 text-green-600">Great job! You passed this exercise.</p>
-                        ) : (
-                            <div className="mt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
-                               <p className="text-red-600 font-semibold">You need to score at least 80% to pass.</p>
-                               <button onClick={handleRetry} className="bg-accent hover:bg-amber-500 text-text-primary font-bold py-2 px-4 rounded-lg">
-                                   Retry
-                               </button>
-                            </div>
-                        )}
-                    </div>
-                )}
-            </div>
-        </div>
-    );
-};
-
-
-const ActivityCard: React.FC<{ activity: Activity; onStartPractice: (topic: string) => void, onComplete: () => void }> = ({ activity, onStartPractice, onComplete }) => {
+const ActivityCard: React.FC<{ activity: Activity; onStartPractice: (topic: string) => void; onCompleteActivity: (activityId: string) => void; }> = ({ activity, onStartPractice, onCompleteActivity }) => {
   const [showTranslation, setShowTranslation] = useState(false);
   const isConversation = activity.type === ActivityType.Conversation;
   const isListeningActivity = activity.type === ActivityType.Listening;
   
-  const isGrammarExercise = activity.type === ActivityType.Grammar && activity.questions && activity.questions.length > 0;
-  const isManuallyCompletable = activity.type !== ActivityType.Quiz && !isGrammarExercise;
+  // Grammar Quiz State
+  const isGrammarQuiz = activity.type === ActivityType.Grammar && activity.questions && activity.questions.length > 0;
+  const [selectedAnswers, setSelectedAnswers] = useState<Record<string, string>>({});
+  const [showQuizResults, setShowQuizResults] = useState(activity.isCompleted || false);
 
   // Audio Player State
   const [isLoadingAudio, setIsLoadingAudio] = useState(false);
@@ -191,6 +85,27 @@ const ActivityCard: React.FC<{ activity: Activity; onStartPractice: (topic: stri
         }
     }
   };
+
+  const handleSelectQuizAnswer = (questionId: string, answer: string) => {
+    if (activity.isCompleted || showQuizResults) return;
+    setSelectedAnswers(prev => ({ ...prev, [questionId]: answer }));
+  };
+
+  const handleSubmitQuiz = () => {
+    if (!activity.questions) return;
+    setShowQuizResults(true);
+    const score = activity.questions.reduce((total, q) => (selectedAnswers[q.id] === q.correctAnswer ? total + 1 : total), 0);
+    const scorePercentage = Math.round((score / activity.questions.length) * 100);
+    if (scorePercentage >= 70 && !activity.isCompleted) {
+        onCompleteActivity(activity.id);
+    }
+  };
+
+  const score = useMemo(() => {
+    if (!isGrammarQuiz || !activity.questions) return 0;
+    return activity.questions.reduce((total, q) => (selectedAnswers[q.id] === q.correctAnswer ? total + 1 : total), 0);
+  }, [selectedAnswers, activity.questions, isGrammarQuiz]);
+
 
   return (
     <div className={`bg-base-100 p-5 rounded-lg shadow space-y-3 transition-all duration-300 ${activity.isCompleted ? 'border-l-4 border-green-500' : 'border-l-4 border-transparent'}`}>
@@ -261,6 +176,80 @@ const ActivityCard: React.FC<{ activity: Activity; onStartPractice: (topic: stri
         </div>
       )}
 
+       {/* Grammar Quiz Section */}
+       {isGrammarQuiz && activity.questions && (
+        <div className="pt-2">
+          <div className="bg-base-200/60 rounded-lg p-4">
+            <h5 className="font-semibold text-text-primary mb-4">Practice Quiz</h5>
+            <div className="space-y-5">
+              {activity.questions.map(q => (
+                <div key={q.id}>
+                  <p className="font-semibold text-text-primary">{q.text}</p>
+                  <div className="mt-3 space-y-2">
+                    {q.options.map(option => {
+                      const isSelected = selectedAnswers[q.id] === option;
+                      const isCorrect = option === q.correctAnswer;
+                      let resultClass = '';
+                      let resultIcon = null;
+
+                      if (showQuizResults) {
+                        if (isCorrect) {
+                          resultClass = 'border-green-500 bg-green-100/60 text-green-800';
+                          if (isSelected) resultIcon = <CheckCircleIcon className="h-5 w-5 text-green-600" />;
+                        } else if (isSelected && !isCorrect) {
+                          resultClass = 'border-red-500 bg-red-100/60 text-red-800';
+                          resultIcon = <XIcon className="h-5 w-5 text-red-600" />;
+                        } else {
+                          resultClass = 'border-base-300';
+                        }
+                      } else {
+                        resultClass = isSelected ? 'border-primary bg-blue-100/60' : 'border-base-300 hover:border-secondary';
+                      }
+
+                      return (
+                        <button
+                          key={option}
+                          onClick={() => handleSelectQuizAnswer(q.id, option)}
+                          disabled={showQuizResults}
+                          className={`w-full p-3 rounded-lg text-left transition-all duration-200 border-2 flex justify-between items-center ${resultClass} disabled:cursor-not-allowed`}
+                        >
+                          <span>{option}</span>
+                          {resultIcon}
+                        </button>
+                      );
+                    })}
+                  </div>
+                   {showQuizResults && selectedAnswers[q.id] !== q.correctAnswer && (
+                       <div className="mt-2 flex items-center gap-2 text-sm text-primary">
+                           <TargetIcon className="h-5 w-5" />
+                           <span>Correct answer: {q.correctAnswer}</span>
+                       </div>
+                   )}
+                </div>
+              ))}
+            </div>
+            {!activity.isCompleted && (
+              <div className="mt-6 text-right">
+                {showQuizResults ? (
+                   <div className="text-center font-semibold text-lg text-text-primary p-3 bg-base-100 rounded-lg">
+                        You scored {score} out of {activity.questions.length}!
+                   </div>
+                ) : (
+                  <button
+                    onClick={handleSubmitQuiz}
+                    disabled={Object.keys(selectedAnswers).length !== activity.questions.length}
+                    className="bg-accent hover:bg-amber-500 text-text-primary font-bold py-2 px-6 rounded-lg transition-colors duration-300 disabled:bg-gray-300 disabled:cursor-not-allowed"
+                  >
+                    Check Answers
+                  </button>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+
       {isConversation && (
          <div className="pt-2">
             <button 
@@ -270,20 +259,6 @@ const ActivityCard: React.FC<{ activity: Activity; onStartPractice: (topic: stri
                 Start Conversation Practice
             </button>
          </div>
-      )}
-      
-      {isGrammarExercise && <GrammarQuiz activity={activity} onComplete={onComplete} />}
-
-      {isManuallyCompletable && !activity.isCompleted && (
-        <div className="pt-4 mt-4 border-t border-base-200">
-            <button
-                onClick={onComplete}
-                className="bg-base-200 hover:bg-base-300 text-text-primary font-semibold py-2 px-4 rounded-lg transition-colors duration-300 flex items-center justify-start gap-2 text-sm"
-            >
-                <CheckCircleIcon className="w-5 h-5" />
-                Mark as Complete
-            </button>
-        </div>
       )}
     </div>
   );
@@ -299,11 +274,6 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, courseLevel, onBack, on
     [lesson.activities]
   );
   
-  const allActivitiesCompleted = useMemo(() =>
-    lesson.activities.length > 0 && lesson.activities.every(a => a.isCompleted),
-    [lesson.activities]
-  );
-
   const isModuleTest = useMemo(() => lesson.title.toLowerCase().includes('module test'), [lesson.title]);
 
   const handleStartPractice = (topic: string) => {
@@ -312,6 +282,10 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, courseLevel, onBack, on
   
   const handleEndPractice = () => {
     setPracticingTopic(null);
+    const conversationActivity = lesson.activities.find(a => a.type === ActivityType.Conversation);
+    if (conversationActivity) {
+      onCompleteActivity(conversationActivity.id);
+    }
   };
 
   const handleStartTest = () => {
@@ -335,6 +309,8 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, courseLevel, onBack, on
     return <AssessmentView lesson={lesson} quizActivity={quizActivity} onComplete={handleTestComplete} />;
   }
 
+  const containsNonQuizActivities = lesson.activities.some(a => a.type !== ActivityType.Quiz && a.type !== ActivityType.Grammar);
+
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-4">
@@ -349,7 +325,7 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, courseLevel, onBack, on
       
       <div className="space-y-4">
         <h3 className="text-xl font-bold text-text-primary">Activities</h3>
-        {quizActivity && !isModuleTest ? ( // Only show "Start Test" for final course tests
+        {quizActivity && !isModuleTest ? (
             <div className="bg-base-100 p-5 rounded-lg shadow text-center">
                  <h4 className="text-lg font-semibold text-text-primary">{quizActivity.title}</h4>
                  <p className="text-text-secondary mt-2">{quizActivity.content}</p>
@@ -366,15 +342,15 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, courseLevel, onBack, on
                 key={activity.id} 
                 activity={activity} 
                 onStartPractice={handleStartPractice}
-                onComplete={() => onCompleteActivity(activity.id)}
+                onCompleteActivity={onCompleteActivity}
               />
             ))
         )}
       </div>
-
-      {!quizActivity && allActivitiesCompleted && !lesson.isCompleted && (
+      
+      {!quizActivity && !isModuleTest && !lesson.isCompleted && containsNonQuizActivities && (
         <div className="mt-8 text-center">
-            <button 
+            <button
                 onClick={onCompleteLesson}
                 className="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 flex items-center justify-center gap-2 mx-auto"
             >
@@ -382,7 +358,7 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, courseLevel, onBack, on
                 Complete Lesson & Continue
             </button>
         </div>
-       )}
+      )}
     </div>
   );
 };
