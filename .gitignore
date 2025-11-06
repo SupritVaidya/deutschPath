@@ -28,4 +28,8 @@ dist-ssr
 backend/DeutschPath/.vs/
 backend/DeutschPath/bin/
 backend/DeutschPath/obj/
-/backend/DeutschPath/publish
+backend/DeutschPath/publish/
+publish/
+dist/
+.env
+.env.*
