@@ -1,18 +1,7 @@
 import React, { useState, useMemo, useRef } from 'react';
-
+import { Lesson, Activity, ActivityType, CEFRLevel } from '../../types';
 // --- TYPE DEFINITIONS (from types.ts) ---
 
-export type CEFRLevel = 'A1' | 'A2' | 'B1' | 'B2' | 'C1' | 'C2';
-
-export enum ActivityType {
-  Vocabulary = 'Vocabulary',
-  Grammar = 'Grammar',
-  Listening = 'Listening',
-  Reading = 'Reading',
-  Conversation = 'Conversation',
-  Writing = 'Writing',
-  Quiz = 'Quiz',
-}
 
 export interface VocabularyItem {
   german: string;
@@ -30,26 +19,6 @@ export interface QuizQuestion {
   text: string;
   options: string[];
   correctAnswer: string;
-}
-
-export interface Activity {
-  id: string;
-  type: ActivityType;
-  title: string;
-  content: string;
-  isCompleted?: boolean;
-  vocabulary?: VocabularyItem[];
-  dialogue?: DialogueTurn[];
-  dialogueTranslation?: DialogueTurn[];
-  questions?: QuizQuestion[];
-}
-
-export interface Lesson {
-  id: string;
-  title: string;
-  estimatedTime: number; // in minutes
-  isCompleted: boolean;
-  activities: Activity[];
 }
 
 // --- ICON COMPONENTS (from icons.ts) ---
