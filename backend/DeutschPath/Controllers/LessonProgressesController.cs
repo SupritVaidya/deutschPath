@@ -49,7 +49,7 @@ namespace DeutschPath.Controllers
 
             // Example: calculate for all levels
             var levels = new Dictionary<string, int> {
-                { "a1", 18 }, { "a2", 21 }, { "b1", 21 }, { "b2", 21 }
+                { "a1", 18 }, { "a2", 21 }, { "b1", 21 }, { "b2", 21 }, { "g-a1", 5}, { "g-a2", 5}, { "g-b1", 5}, { "g-b2", 5}
             };
             var result = new Dictionary<string, double>();
             foreach (var kvp in levels)
