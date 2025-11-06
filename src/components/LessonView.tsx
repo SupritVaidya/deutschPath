@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useRef } from 'react';
 import { Lesson, Activity, ActivityType, CEFRLevel } from '../../types';
-import { ArrowLeftIcon, LanguagesIcon, PlayIcon, PauseIcon, Loader2Icon, CheckCircleIcon } from './icons';
+import { ArrowLeftIcon, LanguagesIcon, PlayIcon, PauseIcon, Loader2Icon, CheckCircleIcon, TargetIcon } from './icons';
 import ConversationPractice from './ConversationPractice';
 import AssessmentView from './AssessmentView';
 import { generateSpeech } from '../services/geminiService';
@@ -14,11 +14,121 @@ interface LessonViewProps {
   onCompleteActivity: (activityId: string) => void;
 }
 
-const ActivityCard: React.FC<{ activity: Activity; onStartPractice: (topic: string) => void }> = ({ activity, onStartPractice }) => {
+const GrammarQuiz: React.FC<{ activity: Activity, onComplete: () => void }> = ({ activity, onComplete }) => {
+    const questions = activity.questions || [];
+    const [answers, setAnswers] = useState<Record<string, string>>({});
+    const [isSubmitted, setIsSubmitted] = useState(false);
+
+    const score = Object.entries(answers).reduce((total, [questionId, answer]) => {
+      const question = questions.find(q => q.id === questionId);
+      return question && question.correctAnswer === answer ? total + 1 : total;
+    }, 0);
+    
+    const allAnswered = Object.keys(answers).length === questions.length;
+    const passed = score / questions.length >= 0.8;
+
+    const handleSubmit = () => {
+        setIsSubmitted(true);
+        if (score / questions.length >= 0.8) {
+            onComplete();
+        }
+    };
+    
+    const handleRetry = () => {
+        setAnswers({});
+        setIsSubmitted(false);
+    };
+
+    if (activity.isCompleted) {
+        return (
+            <div className="pt-4 mt-4 border-t border-base-200">
+                <div className="flex items-center gap-2 p-3 rounded-lg bg-green-100 text-green-700 font-semibold">
+                    <CheckCircleIcon className="h-5 w-5" />
+                    Exercise Completed
+                </div>
+            </div>
+        );
+    }
+
+    return (
+        <div className="pt-4 mt-4 border-t border-base-200">
+            <h5 className="font-semibold text-text-primary mb-4">Exercise: Choose the correct option</h5>
+            <div className="space-y-6">
+                {questions.map((q, index) => (
+                    <div key={q.id}>
+                        <p className="font-medium text-text-primary" dangerouslySetInnerHTML={{ __html: `${index + 1}. ${q.text}`}} />
+                        <div className="mt-2 space-y-2">
+                            {q.options.map(option => {
+                                const isSelected = answers[q.id] === option;
+                                const isCorrect = q.correctAnswer === option;
+                                
+                                let buttonClass = 'border-base-300 hover:border-secondary';
+                                if (isSubmitted) {
+                                    if (isSelected && isCorrect) buttonClass = 'border-green-500 bg-green-50 text-green-800';
+                                    else if (isSelected && !isCorrect) buttonClass = 'border-red-500 bg-red-50 text-red-800';
+                                    else if (isCorrect) buttonClass = 'border-green-500 bg-green-50';
+                                    else buttonClass = 'border-base-300 text-text-secondary';
+                                } else if (isSelected) {
+                                    buttonClass = 'border-primary bg-blue-50';
+                                }
+
+                                return (
+                                    <button
+                                        key={option}
+                                        onClick={() => !isSubmitted && setAnswers(prev => ({ ...prev, [q.id]: option }))}
+                                        className={`w-full p-3 text-left rounded-lg border-2 transition-all duration-200 ${isSubmitted ? 'cursor-default' : ''} ${buttonClass}`}
+                                    >
+                                        {option}
+                                    </button>
+                                );
+                            })}
+                        </div>
+                         {isSubmitted && answers[q.id] !== q.correctAnswer && (
+                            <div className="flex items-center gap-2 mt-2 text-sm text-blue-600">
+                                <TargetIcon className="h-4 w-4" />
+                                <span>Correct answer: {q.correctAnswer}</span>
+                            </div>
+                        )}
+                    </div>
+                ))}
+            </div>
+            <div className="mt-6 pt-4 border-t border-base-200">
+                {!isSubmitted ? (
+                    <button 
+                        onClick={handleSubmit} 
+                        disabled={!allAnswered}
+                        className="w-full bg-primary hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition-colors duration-300 disabled:bg-gray-400"
+                    >
+                        Check Answers
+                    </button>
+                ) : (
+                    <div className="text-center p-4 rounded-lg bg-base-200">
+                        <p className="text-lg font-bold">Your score: {score} / {questions.length}</p>
+                        {passed ? (
+                            <p className="mt-2 text-green-600">Great job! You passed this exercise.</p>
+                        ) : (
+                            <div className="mt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
+                               <p className="text-red-600 font-semibold">You need to score at least 80% to pass.</p>
+                               <button onClick={handleRetry} className="bg-accent hover:bg-amber-500 text-text-primary font-bold py-2 px-4 rounded-lg">
+                                   Retry
+                               </button>
+                            </div>
+                        )}
+                    </div>
+                )}
+            </div>
+        </div>
+    );
+};
+
+
+const ActivityCard: React.FC<{ activity: Activity; onStartPractice: (topic: string) => void, onComplete: () => void }> = ({ activity, onStartPractice, onComplete }) => {
   const [showTranslation, setShowTranslation] = useState(false);
   const isConversation = activity.type === ActivityType.Conversation;
   const isListeningActivity = activity.type === ActivityType.Listening;
-  const isManuallyCompletable = activity.type !== ActivityType.Quiz;
+  
+  const isGrammarExercise = activity.type === ActivityType.Grammar && activity.questions && activity.questions.length > 0;
+  const isManuallyCompletable = activity.type !== ActivityType.Quiz && !isGrammarExercise;
 
   // Audio Player State
   const [isLoadingAudio, setIsLoadingAudio] = useState(false);
@@ -161,6 +271,20 @@ const ActivityCard: React.FC<{ activity: Activity; onStartPractice: (topic: stri
             </button>
          </div>
       )}
+      
+      {isGrammarExercise && <GrammarQuiz activity={activity} onComplete={onComplete} />}
+
+      {isManuallyCompletable && !activity.isCompleted && (
+        <div className="pt-4 mt-4 border-t border-base-200">
+            <button
+                onClick={onComplete}
+                className="bg-base-200 hover:bg-base-300 text-text-primary font-semibold py-2 px-4 rounded-lg transition-colors duration-300 flex items-center justify-start gap-2 text-sm"
+            >
+                <CheckCircleIcon className="w-5 h-5" />
+                Mark as Complete
+            </button>
+        </div>
+      )}
     </div>
   );
 };
@@ -225,7 +349,7 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, courseLevel, onBack, on
       
       <div className="space-y-4">
         <h3 className="text-xl font-bold text-text-primary">Activities</h3>
-        {quizActivity && !isModuleTest ? (
+        {quizActivity && !isModuleTest ? ( // Only show "Start Test" for final course tests
             <div className="bg-base-100 p-5 rounded-lg shadow text-center">
                  <h4 className="text-lg font-semibold text-text-primary">{quizActivity.title}</h4>
                  <p className="text-text-secondary mt-2">{quizActivity.content}</p>
@@ -242,19 +366,23 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, courseLevel, onBack, on
                 key={activity.id} 
                 activity={activity} 
                 onStartPractice={handleStartPractice}
+                onComplete={() => onCompleteActivity(activity.id)}
               />
             ))
         )}
       </div>
-      {/* Common Mark as Complete button for the whole module/lesson */}
-      <div className="mt-8 text-center">
-        <button
-          className="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 flex items-center justify-center gap-2 mx-auto"
-        >
-          <CheckCircleIcon className="w-6 h-6" />
-          Mark Module as Complete
-        </button>
-      </div>
+
+      {!quizActivity && allActivitiesCompleted && !lesson.isCompleted && (
+        <div className="mt-8 text-center">
+            <button 
+                onClick={onCompleteLesson}
+                className="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 flex items-center justify-center gap-2 mx-auto"
+            >
+                <CheckCircleIcon className="w-6 h-6" />
+                Complete Lesson & Continue
+            </button>
+        </div>
+       )}
     </div>
   );
 };
