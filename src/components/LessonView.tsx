@@ -120,11 +120,11 @@ interface LessonViewProps {
   onCompleteActivity: (activityId: string) => void;
 }
 
+
 const ActivityCard: React.FC<{ activity: Activity; onStartPractice: (topic: string) => void; onCompleteActivity: (activityId: string) => void; }> = ({ activity, onStartPractice, onCompleteActivity }) => {
   const [showTranslation, setShowTranslation] = useState(false);
   const isConversation = activity.type === ActivityType.Conversation;
   const isListeningActivity = activity.type === ActivityType.Listening;
-  
   // --- UPGRADED QUIZ LOGIC ---
   // This now checks for *any* activity with questions, not just Grammar.
   const hasQuiz = activity.questions && activity.questions.length > 0;
@@ -133,66 +133,41 @@ const ActivityCard: React.FC<{ activity: Activity; onStartPractice: (topic: stri
   const [selectedAnswers, setSelectedAnswers] = useState<Record<string, string>>({});
   const [showQuizResults, setShowQuizResults] = useState(activity.isCompleted || false);
 
-  // Audio Player State
-  const [isLoadingAudio, setIsLoadingAudio] = useState(false);
+  // TTS for dialogue
   const [isPlaying, setIsPlaying] = useState(false);
-  const [audioBuffer, setAudioBuffer] = useState<AudioBuffer | null>(null);
-  const audioContextRef = useRef<AudioContext | null>(null);
-  const audioSourceRef = useRef<AudioBufferSourceNode | null>(null);
+  const [isLoadingAudio, setIsLoadingAudio] = useState(false);
+  const ttsUtterancesRef = useRef<SpeechSynthesisUtterance[] | null>(null);
 
-  const handlePlayPause = async () => {
-    if (!audioContextRef.current) {
-        audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)({ sampleRate: 24000 });
-    }
-    const audioContext = audioContextRef.current;
-    
+  const handlePlayPause = () => {
+    if (!activity.dialogue || !window.speechSynthesis) return;
     if (isPlaying) {
-        if (audioSourceRef.current) {
-            audioSourceRef.current.stop();
-            audioSourceRef.current = null;
+      window.speechSynthesis.cancel();
+      setIsPlaying(false);
+      return;
+    }
+    setIsPlaying(true);
+    setIsLoadingAudio(true);
+    // Prepare utterances for each dialogue turn
+    const utterances = activity.dialogue.map(turn => {
+      const u = new window.SpeechSynthesisUtterance(turn.line);
+      u.lang = 'de-DE';
+      u.rate = 1;
+      u.onend = () => {
+        // If this is the last utterance, set isPlaying to false
+        if (ttsUtterancesRef.current && utterances.indexOf(u) === utterances.length - 1) {
+          setIsPlaying(false);
+          setIsLoadingAudio(false);
         }
+      };
+      u.onerror = () => {
         setIsPlaying(false);
-        return;
-    }
-
-    if (audioBuffer) {
-        const source = audioContext.createBufferSource();
-        source.buffer = audioBuffer;
-        source.connect(audioContext.destination);
-        source.onended = () => {
-            setIsPlaying(false);
-            audioSourceRef.current = null;
-        };
-        source.start(0);
-        audioSourceRef.current = source;
-        setIsPlaying(true);
-    } else if (activity.dialogue) {
-        setIsLoadingAudio(true);
-        const dialogueText = activity.dialogue.map(d => `${d.speaker}: ${d.line}`).join('\n');
-        const base64Audio = await generateSpeech(dialogueText);
         setIsLoadingAudio(false);
-
-        if (base64Audio && audioContext) {
-            try {
-                const decodedBytes = decode(base64Audio);
-                const buffer = await decodeAudioData(decodedBytes, audioContext, 24000, 1);
-                setAudioBuffer(buffer);
-
-                const source = audioContext.createBufferSource();
-                source.buffer = buffer;
-                source.connect(audioContext.destination);
-                source.onended = () => {
-                    setIsPlaying(false);
-                    audioSourceRef.current = null;
-                };
-                source.start(0);
-                audioSourceRef.current = source;
-                setIsPlaying(true);
-            } catch (error) {
-                console.error("Error decoding audio data:", error);
-            }
-        }
-    }
+      };
+      return u;
+    });
+    ttsUtterancesRef.current = utterances;
+    utterances.forEach(u => window.speechSynthesis.speak(u));
+    setIsLoadingAudio(false);
   };
 
   const handleSelectQuizAnswer = (questionId: string, answer: string) => {
