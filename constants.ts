@@ -60,7 +60,14 @@ export const MOCK_COURSES: Course[] = [
                 id: 'a1l1a2',
                 type: ActivityType.Grammar,
                 title: 'The Verb "sein" (to be)',
-                content: 'Learn to conjugate the most important verb: "to be". (ich bin, du bist, er/sie/es ist...)'
+                content: 'The verb "sein" (to be) is one of the most important verbs in German. It is irregular. Let\'s practice its conjugation in the present tense.',
+                questions: [
+                    { id: 'a1l1a2q1', text: 'Ich ___ Alex.', options: ['bin', 'bist', 'ist', 'sind'], correctAnswer: 'bin' },
+                    { id: 'a1l1a2q2', text: 'Du ___ müde.', options: ['bin', 'bist', 'ist', 'seid'], correctAnswer: 'bist' },
+                    { id: 'a1l1a2q3', text: 'Er ___ aus Deutschland.', options: ['bin', 'bist', 'ist', 'sind'], correctAnswer: 'ist' },
+                    { id: 'a1l1a2q4', text: 'Wir ___ Freunde.', options: ['sind', 'seid', 'ist', 'bin'], correctAnswer: 'sind' },
+                    { id: 'a1l1a2q5', text: 'Ihr ___ schnell.', options: ['sind', 'seid', 'ist', 'bin'], correctAnswer: 'seid' },
+                ]
               },
               {
                 id: 'a1l1a3',
@@ -100,7 +107,18 @@ export const MOCK_COURSES: Course[] = [
             estimatedTime: 20,
             isCompleted: false,
             activities: [
-              { id: 'a1l2b1', type: ActivityType.Grammar, title: 'W-Fragen (W-Questions)', content: 'Learn the most important question words: Wer? (who), Was? (what), Wo? (where), Woher? (where from), Wie? (how).'},
+              { 
+                id: 'a1l2b1', 
+                type: ActivityType.Grammar, 
+                title: 'W-Fragen (W-Questions)', 
+                content: 'W-Fragen are questions that start with a "W" word. The verb always comes in the second position. Practice choosing the correct question word.',
+                questions: [
+                    { id: 'a1l2b1q1', text: '___ bist du? - Ich bin Maria.', options: ['Wer', 'Was', 'Wo', 'Wie'], correctAnswer: 'Wer' },
+                    { id: 'a1l2b1q2', text: '___ wohnen Sie? - Ich wohne in Berlin.', options: ['Wer', 'Was', 'Wo', 'Wie'], correctAnswer: 'Wo' },
+                    { id: 'a1l2b1q3', text: '___ ist das? - Das ist ein Buch.', options: ['Wer', 'Was', 'Woher', 'Wie'], correctAnswer: 'Was' },
+                    { id: 'a1l2b1q4', text: '___ heißen Sie? - Ich heiße Schmidt.', options: ['Wer', 'Was', 'Wo', 'Wie'], correctAnswer: 'Wie' },
+                ]
+              },
               { id: 'a1l2b2', type: ActivityType.Vocabulary, title: 'Asking About Well-being', content: 'Learn how to ask "How are you?" formally (Wie geht es Ihnen?) and informally (Wie geht es dir?).'},
               { id: 'a1l2b3', type: ActivityType.Conversation, title: 'Asking Basic Questions', content: 'Practice asking and answering basic questions with the AI tutor.'}
             ]
@@ -153,9 +171,41 @@ export const MOCK_COURSES: Course[] = [
         title: 'Module 2: Talking About Yourself',
         progress: 0,
         lessons: [
-            { id: 'a1l3', title: 'Family & Hobbies', estimatedTime: 30, isCompleted: false, activities: [{id: 'a1l3a1', type: ActivityType.Vocabulary, title: 'Family Members', content: 'Learn the words for family members.', vocabulary: [{german: 'die Familie', english: 'the family'}, {german: 'der Vater', english: 'the father'}, {german: 'die Mutter', english: 'the mother'}, {german: 'der Bruder', english: 'the brother'}, {german: 'die Schwester', english: 'the sister'}, {german: 'die Eltern', english: 'the parents'}, {german: 'das Kind', english: 'the child'}] }, {id: 'a1l3a2', type: ActivityType.Grammar, title: 'Possessive Articles (mein, dein)', content: 'Learn to talk about your family and my family.'},{id: 'a1l3a3', type: ActivityType.Conversation, title: 'Talk about your Hobbies', content: 'Tell the AI tutor about your favorite hobbies (meine Hobbys sind...).'}] },
-            { id: 'a1l4', title: 'Telling Time & Daily Routines', estimatedTime: 30, isCompleted: false, activities: [{id: 'a1l4a1', type: ActivityType.Vocabulary, title: 'Telling Time', content: 'Learn how to ask for and tell the time (formal and informal).'}, {id: 'a1l4a2', type: ActivityType.Grammar, title: 'Separable Verbs', content: 'Learn how verbs like "aufstehen" (to get up) and "einkaufen" (to shop) work in a sentence.'}, {id: 'a1l4a3', type: ActivityType.Writing, title: 'My Day', content: 'Write a few simple sentences about your daily routine.'}, {id: 'a1l4a4', type: ActivityType.Vocabulary, title: 'Days of the Week', content: 'Learn the days of the week from Montag to Sonntag.'}] },
-            { id: 'a1l5', title: 'Modal Verbs (können, müssen, möchten)', estimatedTime: 25, isCompleted: false, activities: [{id: 'a1l5a1', type: ActivityType.Grammar, title: 'Using Modal Verbs', content: 'Learn how to use modal verbs to talk about ability (können), necessity (müssen) and wishes (möchten).'}, {id: 'a1l5a2', type: ActivityType.Conversation, title: 'Making Plans', content: 'Practice making simple plans with the AI tutor using modal verbs. (e.g., "Ich möchte ins Kino gehen.")'}] },
+            { id: 'a1l3', title: 'Family & Hobbies', estimatedTime: 30, isCompleted: false, activities: [{id: 'a1l3a1', type: ActivityType.Vocabulary, title: 'Family Members', content: 'Learn the words for family members.', vocabulary: [{german: 'die Familie', english: 'the family'}, {german: 'der Vater', english: 'the father'}, {german: 'die Mutter', english: 'the mother'}, {german: 'der Bruder', english: 'the brother'}, {german: 'die Schwester', english: 'the sister'}, {german: 'die Eltern', english: 'the parents'}, {german: 'das Kind', english: 'the child'}] }, {
+                id: 'a1l3a2', 
+                type: ActivityType.Grammar, 
+                title: 'Possessive Articles (mein, dein)', 
+                content: 'Possessive articles show ownership. They change their ending based on the gender and case of the noun. Practice "mein" (my) and "dein" (your).',
+                questions: [
+                    { id: 'a1l3a2q1', text: 'Das ist ___ Bruder (der Bruder).', options: ['mein', 'meine', 'meinen'], correctAnswer: 'mein' },
+                    { id: 'a1l3a2q2', text: 'Ist das ___ Schwester (die Schwester)?', options: ['dein', 'deine', 'deinen'], correctAnswer: 'deine' },
+                    { id: 'a1l3a2q3', text: 'Hier ist ___ Kind (das Kind).', options: ['mein', 'meine', 'meins'], correctAnswer: 'mein' },
+                    { id: 'a1l3a2q4', text: 'Ich sehe ___ Vater (der Vater).', options: ['dein', 'deine', 'deinen'], correctAnswer: 'deinen' },
+                ]
+            },{id: 'a1l3a3', type: ActivityType.Conversation, title: 'Talk about your Hobbies', content: 'Tell the AI tutor about your favorite hobbies (meine Hobbys sind...).'}] },
+            { id: 'a1l4', title: 'Telling Time & Daily Routines', estimatedTime: 30, isCompleted: false, activities: [{id: 'a1l4a1', type: ActivityType.Vocabulary, title: 'Telling Time', content: 'Learn how to ask for and tell the time (formal and informal).'}, {
+                id: 'a1l4a2', 
+                type: ActivityType.Grammar, 
+                title: 'Separable Verbs', 
+                content: 'Many German verbs have a separable prefix. In a simple present tense sentence, the prefix goes to the end. Practice forming sentences with separable verbs.',
+                questions: [
+                    { id: 'a1l4a2q1', text: 'Ich ___ um 7 Uhr ___. (aufstehen)', options: ['stehe / auf', 'auf / stehe', 'stehe auf / '], correctAnswer: 'stehe / auf' },
+                    { id: 'a1l4a2q2', text: 'Der Zug ___ um 10 Uhr ___. (abfahren)', options: ['fahre / ab', 'fährt / ab', 'ab / fährt'], correctAnswer: 'fährt / ab' },
+                    { id: 'a1l4a2q3', text: 'Wann ___ du ___? (anrufen)', options: ['rufst / an', 'an / rufst', 'rufe an / '], correctAnswer: 'rufst / an' },
+                ]
+            }, {id: 'a1l4a3', type: ActivityType.Writing, title: 'My Day', content: 'Write a few simple sentences about your daily routine.'}, {id: 'a1l4a4', type: ActivityType.Vocabulary, title: 'Days of the Week', content: 'Learn the days of the week from Montag to Sonntag.'}] },
+            { id: 'a1l5', title: 'Modal Verbs (können, müssen, möchten)', estimatedTime: 25, isCompleted: false, activities: [{
+                id: 'a1l5a1', 
+                type: ActivityType.Grammar, 
+                title: 'Using Modal Verbs', 
+                content: 'Modal verbs change the meaning of another verb. The modal verb is conjugated and in the second position, and the main verb is in its infinitive form at the end of the sentence. Let\'s practice!',
+                questions: [
+                    { id: 'a1l5a1q1', text: 'Ich ___ gut schwimmen.', options: ['kann', 'können', 'kannst'], correctAnswer: 'kann' },
+                    { id: 'a1l5a1q2', text: 'Du ___ heute arbeiten.', options: ['muss', 'musst', 'müssen'], correctAnswer: 'musst' },
+                    { id: 'a1l5a1q3', text: 'Er ___ einen Kaffee trinken.', options: ['möchte', 'möchten', 'möchtest'], correctAnswer: 'möchte' },
+                    { id: 'a1l5a1q4', text: 'Wir ___ ins Kino gehen.', options: ['kann', 'könnt', 'können'], correctAnswer: 'können' },
+                ]
+            }, {id: 'a1l5a2', type: ActivityType.Conversation, title: 'Making Plans', content: 'Practice making simple plans with the AI tutor using modal verbs. (e.g., "Ich möchte ins Kino gehen.")'}] },
             {
               id: 'a1m2-test',
               title: 'Module 2 Test',
@@ -223,12 +273,43 @@ export const MOCK_COURSES: Course[] = [
                   { german: 'die Rechnung', english: 'the bill'},
                 ],
               },
-              { id: 'a1l6a2', type: ActivityType.Grammar, title: 'The Accusative Case', content: 'Learn how to say "I would like A coffee" (Ich möchte einen Kaffee).' },
+              { 
+                id: 'a1l6a2', 
+                type: ActivityType.Grammar, 
+                title: 'The Accusative Case', 
+                content: 'The accusative case is for the direct object. For masculine nouns, articles change: "der" becomes "den", "ein" becomes "einen". Feminine, neuter, and plural articles do not change. Practice choosing the correct article.',
+                questions: [
+                    { id: 'a1l6a2q1', text: 'Ich möchte ___ Kaffee (der).', options: ['ein', 'eine', 'einen'], correctAnswer: 'einen' },
+                    { id: 'a1l6a2q2', text: 'Er kauft ___ Apfel (der).', options: ['den', 'der', 'dem'], correctAnswer: 'den' },
+                    { id: 'a1l6a2q3', text: 'Sie hat ___ Katze (die).', options: ['ein', 'eine', 'einen'], correctAnswer: 'eine' },
+                    { id: 'a1l6a2q4', text: 'Wir sehen ___ Haus (das).', options: ['das', 'den', 'dem'], correctAnswer: 'das' },
+                ]
+              },
               { id: 'a1l6a3', type: ActivityType.Conversation, title: 'Practice: Order a Coffee', content: 'Roleplay ordering a coffee and a piece of cake in a German café.' },
             ],
           },
-          { id: 'a1l7', title: 'Shopping for Groceries', estimatedTime: 30, isCompleted: false, activities: [{id: 'a1l7a1', type: ActivityType.Vocabulary, title: 'At the Supermarket', content: 'Learn words for common grocery items and how to say how much you want.'}, {id: 'a1l7a2', type: ActivityType.Conversation, title: 'Practice Shopping', content: 'Roleplay a short shopping trip.'}, {id: 'a1l7a3', type: ActivityType.Grammar, title: 'Plural Nouns', content: 'Learn the basic rules for forming plural nouns (e.g., der Apfel -> die Äpfel).'}] },
-           { id: 'a1l7b', title: 'Expressing Likes and Dislikes', estimatedTime: 20, isCompleted: false, activities: [{id: 'a1l7b1', type: ActivityType.Vocabulary, title: 'Using "gern"', content: 'Learn how to express that you like doing something using "gern" (e.g., "Ich schwimme gern.").'}, {id: 'a1l7b2', type: ActivityType.Grammar, title: 'The verb "mögen"', content: 'Learn how to use "mögen" to say you like something or someone (e.g., "Ich mag Schokolade.").'}, {id: 'a1l7b3', type: ActivityType.Conversation, title: 'What do you like?', content: 'Talk about the food, drinks, and activities you like and dislike.'}] },
+          { id: 'a1l7', title: 'Shopping for Groceries', estimatedTime: 30, isCompleted: false, activities: [{id: 'a1l7a1', type: ActivityType.Vocabulary, title: 'At the Supermarket', content: 'Learn words for common grocery items and how to say how much you want.'}, {id: 'a1l7a2', type: ActivityType.Conversation, title: 'Practice Shopping', content: 'Roleplay a short shopping trip.'}, {
+              id: 'a1l7a3', 
+              type: ActivityType.Grammar, 
+              title: 'Plural Nouns', 
+              content: 'German has many ways to form plurals. It\'s best to learn the plural form with each new noun. Test your knowledge!',
+              questions: [
+                  { id: 'a1l7a3q1', text: 'der Apfel -> die ___', options: ['Äpfel', 'Apfeln', 'Apfels'], correctAnswer: 'Äpfel' },
+                  { id: 'a1l7a3q2', text: 'die Frau -> die ___', options: ['Fraus', 'Frauen', 'Fraue'], correctAnswer: 'Frauen' },
+                  { id: 'a1l7a3q3', text: 'das Auto -> die ___', options: ['Autos', 'Autoen', 'Auter'], correctAnswer: 'Autos' },
+              ]
+          }] },
+           { id: 'a1l7b', title: 'Expressing Likes and Dislikes', estimatedTime: 20, isCompleted: false, activities: [{id: 'a1l7b1', type: ActivityType.Vocabulary, title: 'Using "gern"', content: 'Learn how to express that you like doing something using "gern" (e.g., "Ich schwimme gern.").'}, {
+               id: 'a1l7b2', 
+               type: ActivityType.Grammar, 
+               title: 'The verb "mögen"', 
+               content: 'Learn how to use "mögen" to say you like something or someone. Remember, it\'s irregular!',
+               questions: [
+                   { id: 'a1l7b2q1', text: 'Ich ___ Schokolade.', options: ['mag', 'magst', 'mögen'], correctAnswer: 'mag' },
+                   { id: 'a1l7b2q2', text: '___ du Pizza?', options: ['Mag', 'Mags', 'Magst'], correctAnswer: 'Magst' },
+                   { id: 'a1l7b2q3', text: 'Wir ___ den Sommer.', options: ['mag', 'mögt', 'mögen'], correctAnswer: 'mögen' },
+               ]
+            }, {id: 'a1l7b3', type: ActivityType.Conversation, title: 'What do you like?', content: 'Talk about the food, drinks, and activities you like and dislike.'}] },
            {
               id: 'a1m3-test',
               title: 'Module 3 Test',
@@ -276,10 +357,41 @@ export const MOCK_COURSES: Course[] = [
         title: 'Module 4: Around Town',
         progress: 0,
         lessons: [
-          { id: 'a1l8', title: 'My Apartment', estimatedTime: 25, isCompleted: false, activities: [{id: 'a1l8a1', type: ActivityType.Vocabulary, title: 'Rooms and Furniture', content: 'Learn words to describe your home.'}, {id: 'a1l8a2', type: ActivityType.Grammar, title: 'Prepositions with Dative (in, an, auf)', content: 'Learn prepositions that show location.'}]},
-          { id: 'a1l9', title: 'Asking for Directions', estimatedTime: 30, isCompleted: false, activities: [{id: 'a1l9a1', type: ActivityType.Vocabulary, title: 'Directions', content: 'Learn phrases like "links", "rechts", "geradeaus".'}, {id: 'a1l9a2', type: ActivityType.Listening, title: 'Follow Directions', content: 'Listen to directions to a location.'}, {id: 'a1l9a3', type: ActivityType.Grammar, title: 'The Imperative', content: 'Learn how to give simple commands and directions.'}] },
+          { id: 'a1l8', title: 'My Apartment', estimatedTime: 25, isCompleted: false, activities: [{id: 'a1l8a1', type: ActivityType.Vocabulary, title: 'Rooms and Furniture', content: 'Learn words to describe your home.'}, {
+              id: 'a1l8a2', 
+              type: ActivityType.Grammar, 
+              title: 'Prepositions with Dative (in, an, auf)', 
+              content: 'When two-way prepositions describe a static location (answering "Wo?"), they take the dative case. The dative articles are: dem (m/n), der (f), den (pl).',
+              questions: [
+                  { id: 'a1l8a2q1', text: 'Das Buch liegt auf ___ Tisch (der).', options: ['den', 'dem', 'der'], correctAnswer: 'dem' },
+                  { id: 'a1l8a2q2', text: 'Ich bin in ___ Schule (die).', options: ['den', 'dem', 'der'], correctAnswer: 'der' },
+                  { id: 'a1l8a2q3', text: 'Das Bild hängt an ___ Wand (die).', options: ['den', 'dem', 'der'], correctAnswer: 'der' },
+                  { id: 'a1l8a2q4', text: 'Wir sind in ___ Kino (das).', options: ['dem', 'den', 'im'], correctAnswer: 'im' },
+              ]
+          }]},
+          { id: 'a1l9', title: 'Asking for Directions', estimatedTime: 30, isCompleted: false, activities: [{id: 'a1l9a1', type: ActivityType.Vocabulary, title: 'Directions', content: 'Learn phrases like "links", "rechts", "geradeaus".'}, {id: 'a1l9a2', type: ActivityType.Listening, title: 'Follow Directions', content: 'Listen to directions to a location.'}, {
+              id: 'a1l9a3', 
+              type: ActivityType.Grammar, 
+              title: 'The Imperative', 
+              content: 'The imperative is used for commands. Practice the different forms.',
+              questions: [
+                  { id: 'a1l9a3q1', text: '___ nach Hause! (gehen, informal "du")', options: ['Geh', 'Gehst', 'Gehen'], correctAnswer: 'Geh' },
+                  { id: 'a1l9a3q2', text: '___ Sie bitte langsam! (sprechen, formal "Sie")', options: ['Sprech', 'Sprecht', 'Sprechen Sie'], correctAnswer: 'Sprechen Sie' },
+                  { id: 'a1l9a3q3', text: '___ das Fenster zu! (machen, plural "ihr")', options: ['Mach', 'Macht', 'Machen'], correctAnswer: 'Macht' },
+              ]
+          }] },
           { id: 'a1l10', title: 'Talking about the Weather', estimatedTime: 20, isCompleted: false, activities: [{id: 'a1l10a1', type: ActivityType.Vocabulary, title: 'Weather words', content: 'Learn how to describe the weather, e.g. "Es ist sonnig.".'}, {id: 'a1l10a2', type: ActivityType.Conversation, title: 'Small Talk', content: 'Practice making small talk about the weather.'}]},
-          { id: 'a1l10b', title: 'Public Transportation', estimatedTime: 25, isCompleted: false, activities: [{id: 'a1l10b1', type: ActivityType.Vocabulary, title: 'Transportation', content: 'Learn words for bus, train, subway, etc. (der Bus, die U-Bahn, der Zug).'}, {id: 'a1l10b2', type: ActivityType.Grammar, title: 'The Dative Case with "mit"', content: 'Learn how to say you travel BY a mode of transport (e.g., "Ich fahre mit dem Bus.").'}, {id: 'a1l10b3', type: ActivityType.Conversation, title: 'Getting around the city', content: 'Practice asking how to get to a place and explaining which transport you take.'}]},
+          { id: 'a1l10b', title: 'Public Transportation', estimatedTime: 25, isCompleted: false, activities: [{id: 'a1l10b1', type: ActivityType.Vocabulary, title: 'Transportation', content: 'Learn words for bus, train, subway, etc. (der Bus, die U-Bahn, der Zug).'}, {
+              id: 'a1l10b2', 
+              type: ActivityType.Grammar, 
+              title: 'The Dative Case with "mit"', 
+              content: 'The preposition "mit" (with, by) always takes the dative case. This means the noun that follows it must use the dative article.',
+              questions: [
+                  { id: 'a1l10b2q1', text: 'Ich fahre mit ___ Bus (der).', options: ['den', 'dem', 'der'], correctAnswer: 'dem' },
+                  { id: 'a1l10b2q2', text: 'Er spricht mit ___ Frau (die).', options: ['den', 'dem', 'der'], correctAnswer: 'der' },
+                  { id: 'a1l10b2q3', text: 'Wir spielen mit ___ Kindern (plural).', options: ['die', 'den', 'dem'], correctAnswer: 'den' },
+              ]
+          }, {id: 'a1l10b3', type: ActivityType.Conversation, title: 'Getting around the city', content: 'Practice asking how to get to a place and explaining which transport you take.'}]},
           {
             id: 'a1m4-test',
             title: 'Module 4 Test',
@@ -367,7 +479,18 @@ export const MOCK_COURSES: Course[] = [
         progress: 0,
         lessons: [
           { id: 'a2l1', title: 'Talking About a Vacation (Perfekt)', estimatedTime: 30, isCompleted: false, activities: [
-              {id: 'a2l1a1', type: ActivityType.Grammar, title: 'The "Perfekt" Tense', content: 'Learn how to talk about past events using the Perfekt tense with "haben" and "sein".'},
+              {
+                id: 'a2l1a1', 
+                type: ActivityType.Grammar, 
+                title: 'The "Perfekt" Tense', 
+                content: 'The Perfekt tense is used for the past in spoken German. It\'s formed with "haben" or "sein" + a past participle. Use "sein" for movement/change of state, "haben" for most others.',
+                questions: [
+                    { id: 'a2l1a1q1', text: 'Ich ___ Pizza gegessen.', options: ['habe', 'bin', 'hatte', 'war'], correctAnswer: 'habe' },
+                    { id: 'a2l1a1q2', text: 'Wir ___ nach Berlin gefahren.', options: ['haben', 'sind', 'hatten', 'waren'], correctAnswer: 'sind' },
+                    { id: 'a2l1a1q3', text: 'Hast du den Film ___? (sehen)', options: ['gesehen', 'gesah', 'siehst'], correctAnswer: 'gesehen' },
+                    { id: 'a2l1a1q4', text: 'Er ist zu Hause ___. (bleiben)', options: ['geblieben', 'gebleibt', 'blieb'], correctAnswer: 'geblieben' },
+                ]
+              },
               {id: 'a2l1a2', type: ActivityType.Vocabulary, title: 'Vacation Words', content: 'Vocabulary for travel, holidays, and sightseeing.'},
               {id: 'a2l1a3', type: ActivityType.Conversation, title: 'Your Last Vacation', content: 'Tell the AI tutor about your last vacation using the Perfekt tense.'},
           ]},
@@ -377,8 +500,28 @@ export const MOCK_COURSES: Course[] = [
               {id: 'a2l2a3', type: ActivityType.Conversation, title: 'Buying a Ticket', content: 'Roleplay buying a train ticket to Hamburg.'},
           ]},
           { id: 'a2l3', title: 'Simple Past (Präteritum)', estimatedTime: 25, isCompleted: false, activities: [
-              {id: 'a2l3a1', type: ActivityType.Grammar, title: 'Präteritum of sein/haben', content: 'Learn the simple past tense for "sein" (war) and "haben" (hatte).'},
-              {id: 'a2l3a2', type: ActivityType.Grammar, title: 'Präteritum of Modal Verbs', content: 'Learn the simple past for modal verbs (konnte, musste, wollte...).'},
+              {
+                id: 'a2l3a1', 
+                type: ActivityType.Grammar, 
+                title: 'Präteritum of sein/haben', 
+                content: '"sein" and "haben" often use the Präteritum even in conversation. Practice their simple past forms.',
+                questions: [
+                    { id: 'a2l3a1q1', text: 'Gestern ___ ich im Kino.', options: ['war', 'bin', 'warst', 'gewesen'], correctAnswer: 'war' },
+                    { id: 'a2l3a1q2', text: 'Wir ___ viel Spaß.', options: ['hatten', 'haben', 'hattet', 'gehabt'], correctAnswer: 'hatten' },
+                    { id: 'a2l3a1q3', text: '___ du gestern zu Hause?', options: ['Warst', 'Bist', 'Waren', 'Hattest'], correctAnswer: 'Warst' },
+                ]
+              },
+              {
+                id: 'a2l3a2', 
+                type: ActivityType.Grammar, 
+                title: 'Präteritum of Modal Verbs', 
+                content: 'Modal verbs also frequently use the Präteritum. Note that the umlaut from the present tense is often dropped.',
+                questions: [
+                    { id: 'a2l3a2q1', text: 'Ich ___ nicht schwimmen. (können)', options: ['konnte', 'könnte', 'kann'], correctAnswer: 'konnte' },
+                    { id: 'a2l3a2q2', text: 'Er ___ zur Arbeit gehen. (müssen)', options: ['musste', 'müsste', 'muss'], correctAnswer: 'musste' },
+                    { id: 'a2l3a2q3', text: 'Sie ___ den Film sehen. (wollen)', options: ['wollte', 'wöllte', 'will'], correctAnswer: 'wollte' },
+                ]
+              },
               {id: 'a2l3a3', type: ActivityType.Reading, title: 'A Postcard from the Past', content: 'Read a short postcard using "war" and "hatte".'},
           ]},
           { id: 'a2l3b', title: 'Booking a Hotel Room', estimatedTime: 25, isCompleted: false, activities: [
@@ -434,7 +577,18 @@ export const MOCK_COURSES: Course[] = [
         lessons: [
           { id: 'a2l4', title: 'Describing Your Daily Routine', estimatedTime: 30, isCompleted: false, activities: [
               {id: 'a2l4a1', type: ActivityType.Vocabulary, title: 'Daily Actions', content: 'Learn verbs for your daily routine, like "aufstehen", "frühstücken", "arbeiten".'},
-              {id: 'a2l4a2', type: ActivityType.Grammar, title: 'Reflexive Verbs', content: 'Learn about reflexive verbs and pronouns (sich anziehen, mich waschen).'},
+              {
+                id: 'a2l4a2', 
+                type: ActivityType.Grammar, 
+                title: 'Reflexive Verbs', 
+                content: 'Reflexive verbs require a reflexive pronoun that matches the subject. Practice choosing the correct pronoun.',
+                questions: [
+                    { id: 'a2l4a2q1', text: 'Ich wasche ___.', options: ['mich', 'dich', 'sich', 'uns'], correctAnswer: 'mich' },
+                    { id: 'a2l4a2q2', text: 'Er rasiert ___.', options: ['mich', 'dich', 'sich', 'euch'], correctAnswer: 'sich' },
+                    { id: 'a2l4a2q3', text: 'Wir treffen ___ um 8 Uhr.', options: ['mich', 'sich', 'uns', 'euch'], correctAnswer: 'uns' },
+                    { id: 'a2l4a2q4', text: 'Freust du ___?', options: ['mich', 'dich', 'sich', 'uns'], correctAnswer: 'dich' },
+                ]
+              },
               {id: 'a2l4a3', type: ActivityType.Conversation, title: 'Your Typical Day', content: 'Describe your daily routine to the AI tutor.'},
           ]},
           { id: 'a2l5', title: 'Making an Appointment', estimatedTime: 25, isCompleted: false, activities: [
@@ -442,8 +596,28 @@ export const MOCK_COURSES: Course[] = [
               {id: 'a2l5a2', type: ActivityType.Conversation, title: 'Doctor\'s Appointment', content: 'Roleplay calling a doctor\'s office to make an appointment.'},
           ]},
            { id: 'a2l6', title: 'Connectors (denn, weil, dass)', estimatedTime: 30, isCompleted: false, activities: [
-              {id: 'a2l6a1', type: ActivityType.Grammar, title: 'Giving Reasons', content: 'Learn the difference in word order for "denn" (because) and "weil" (because).'},
-              {id: 'a2l6a2', type: ActivityType.Grammar, title: 'Subordinate Clauses with "dass"', content: 'Learn how to use "dass" (that) to report what you think or what someone said.'},
+              {
+                id: 'a2l6a1', 
+                type: ActivityType.Grammar, 
+                title: 'Giving Reasons (denn vs. weil)', 
+                content: '"denn" (because) doesn\'t change word order. "weil" (because) is a subordinating conjunction and sends the verb to the end of the clause.',
+                questions: [
+                    { id: 'a2l6a1q1', text: 'Ich lerne Deutsch, ___ ich in Deutschland arbeiten will.', options: ['denn', 'weil'], correctAnswer: 'weil' },
+                    { id: 'a2l6a1q2', text: 'Ich gehe nicht spazieren, ___ es regnet.', options: ['denn', 'weil'], correctAnswer: 'denn' },
+                    { id: 'a2l6a1q3', text: 'Ich bin müde, weil ich schlecht ___.', options: ['geschlafen habe', 'habe geschlafen'], correctAnswer: 'geschlafen habe' },
+                ]
+              },
+              {
+                id: 'a2l6a2', 
+                type: ActivityType.Grammar, 
+                title: 'Subordinate Clauses with "dass"', 
+                content: '"dass" (that) introduces a subordinate clause, sending the conjugated verb to the very end.',
+                questions: [
+                    { id: 'a2l6a2q1', text: 'Ich weiß, dass du ___ .', options: ['müde bist', 'bist müde'], correctAnswer: 'müde bist' },
+                    { id: 'a2l6a2q2', text: 'Er denkt, dass das Wetter morgen gut ___ .', options: ['sein wird', 'wird sein'], correctAnswer: 'wird sein' },
+                    { id: 'a2l6a2q3', text: 'Es ist wichtig, dass wir pünktlich ___ .', options: ['sind', 'sein'], correctAnswer: 'sind' },
+                ]
+              },
               {id: 'a2l6a3', type: ActivityType.Writing, title: 'Practice Sentences', content: 'Write sentences explaining why you are learning German.'},
           ]},
            { id: 'a2l6b', title: 'Household Chores', estimatedTime: 20, isCompleted: false, activities: [
@@ -499,17 +673,48 @@ export const MOCK_COURSES: Course[] = [
         lessons: [
           { id: 'a2l7', title: 'Describing People & Things', estimatedTime: 30, isCompleted: false, activities: [
               {id: 'a2l7a1', type: ActivityType.Vocabulary, title: 'Adjectives for Appearance & Personality', content: 'Learn words to describe what people look like and what they are like.'},
-              {id: 'a2l7a2', type: ActivityType.Grammar, title: 'Adjective Endings in Nominative/Accusative', content: 'Practice the declension of adjectives after articles.'},
+              {
+                id: 'a2l7a2', 
+                type: ActivityType.Grammar, 
+                title: 'Adjective Endings', 
+                content: 'When an adjective comes before a noun, it needs an ending. The ending depends on the article, gender, and case. Let\'s practice with Nominative and Accusative.',
+                questions: [
+                    { id: 'a2l7a2q1', text: 'Der ___ Mann ist nett. (gut)', options: ['gut', 'gute', 'guten'], correctAnswer: 'gute' },
+                    { id: 'a2l7a2q2', text: 'Ich sehe einen ___ Hund. (klein)', options: ['klein', 'kleine', 'kleinen'], correctAnswer: 'kleinen' },
+                    { id: 'a2l7a2q3', text: 'Das ist eine ___ Tasche. (neu)', options: ['neu', 'neue', 'neuen'], correctAnswer: 'neue' },
+                    { id: 'a2l7a2q4', text: 'Er kauft das ___ Auto. (rot)', options: ['rot', 'rote', 'roten'], correctAnswer: 'rote' },
+                ]
+              },
               {id: 'a2l7a3', type: ActivityType.Writing, title: 'Describe a Friend', content: 'Write a short text describing a friend or family member.'},
           ]},
           { id: 'a2l8', title: 'Health & Seeing a Doctor', estimatedTime: 30, isCompleted: false, activities: [
               {id: 'a2l8a1', type: ActivityType.Vocabulary, title: 'Body Parts & Sickness', content: 'Learn how to say what hurts (e.g., "Ich habe Kopfschmerzen.").'},
               {id: 'a2l8a2', type: ActivityType.Conversation, title: 'At the Doctor', content: 'Roleplay explaining your symptoms to a doctor.'},
-              {id: 'a2l8a3', type: ActivityType.Grammar, title: 'The Imperative for Advice', content: 'Learn how doctors give advice using the imperative (e.g., "Bleiben Sie im Bett.").'},
+              {
+                id: 'a2l8a3', 
+                type: ActivityType.Grammar, 
+                title: 'The Imperative for Advice', 
+                content: 'The formal imperative (using "Sie") is a polite way to give advice. The structure is Verb + Sie + ... .',
+                questions: [
+                    { id: 'a2l8a3q1', text: '___ Sie die Tabletten. (nehmen)', options: ['Nehmen', 'Nehmen Sie', 'Nimm'], correctAnswer: 'Nehmen Sie' },
+                    { id: 'a2l8a3q2', text: '___ Sie viel Wasser. (trinken)', options: ['Trinken', 'Trink', 'Trinken Sie'], correctAnswer: 'Trinken Sie' },
+                ]
+              },
           ]},
           { id: 'a2l9', title: 'Clothing & Shopping', estimatedTime: 25, isCompleted: false, activities: [
               {id: 'a2l9a1', type: ActivityType.Vocabulary, title: 'Clothing Items', content: 'Learn words for different clothes.'},
-              {id: 'a2l9a2', type: ActivityType.Grammar, title: 'Dative Personal Pronouns', content: '"Mir gefällt der Pullover." Learn to express likes and dislikes.'},
+              {
+                id: 'a2l9a2', 
+                type: ActivityType.Grammar, 
+                title: 'Dative Personal Pronouns', 
+                content: 'The dative case is for the indirect object. Verbs like "helfen" (to help) and "gefallen" (to be pleasing to) always take a dative object. Dative pronouns: mir, dir, ihm, ihr, uns, euch, ihnen/Ihnen.',
+                questions: [
+                    { id: 'a2l9a2q1', text: 'Kannst du ___ helfen?', options: ['ich', 'mich', 'mir'], correctAnswer: 'mir' },
+                    { id: 'a2l9a2q2', text: 'Das Geschenk gefällt ___. (er)', options: ['ihn', 'ihm', 'sein'], correctAnswer: 'ihm' },
+                    { id: 'a2l9a2q3', text: 'Ich danke ___. (Sie, formal)', options: ['Sie', 'Ihnen', 'Ihrer'], correctAnswer: 'Ihnen' },
+                    { id: 'a2l9a2q4', text: 'Der Pullover passt ___. (sie)', options: ['sie', 'ihr', 'ihre'], correctAnswer: 'ihr' },
+                ]
+              },
           ]},
           { id: 'a2l9b', title: 'Holidays and Traditions', estimatedTime: 25, isCompleted: false, activities: [
               {id: 'a2l9b1', type: ActivityType.Vocabulary, title: 'German Holidays', content: 'Learn about major holidays in Germany like Weihnachten (Christmas) and Ostern (Easter).'},
@@ -567,11 +772,33 @@ export const MOCK_COURSES: Course[] = [
           ]},
           { id: 'a2l11', title: 'Invitations & Celebrations', estimatedTime: 30, isCompleted: false, activities: [
               {id: 'a2l11a1', type: ActivityType.Vocabulary, title: 'Party Time', content: 'Learn vocabulary related to birthdays and other celebrations.'},
-              {id: 'a2l11a2', type: ActivityType.Grammar, title: 'Dative Prepositions', content: 'Learn more prepositions that use the dative case (mit, nach, von, zu, aus, bei).'},
+              {
+                id: 'a2l11a2', 
+                type: ActivityType.Grammar, 
+                title: 'Dative Prepositions', 
+                content: 'These prepositions always take the dative case: mit, nach, aus, zu, von, bei. Practice using them.',
+                questions: [
+                    { id: 'a2l11a2q1', text: 'Ich komme ___ Spanien.', options: ['von', 'aus', 'nach'], correctAnswer: 'aus' },
+                    { id: 'a2l11a2q2', text: 'Er fährt ___ dem (zum) Arzt.', options: ['zu', 'bei', 'nach'], correctAnswer: 'zu' },
+                    { id: 'a2l11a2q3', text: 'Sie wohnt ___ ihren Eltern.', options: ['von', 'mit', 'bei'], correctAnswer: 'bei' },
+                    { id: 'a2l11a2q4', text: 'Nach der Arbeit gehe ich ___ Hause.', options: ['zu', 'nach', 'aus'], correctAnswer: 'nach' },
+                ]
+              },
               {id: 'a2l11a3', type: ActivityType.Writing, title: 'Write an Invitation', content: 'Write a short email inviting a friend to your birthday party.'},
           ]},
           { id: 'a2l12', title: 'Comparative & Superlative', estimatedTime: 25, isCompleted: false, activities: [
-              {id: 'a2l12a1', type: ActivityType.Grammar, title: 'Making Comparisons', content: 'Learn how to form comparatives (größer als) and superlatives (am größten).'},
+              {
+                id: 'a2l12a1', 
+                type: ActivityType.Grammar, 
+                title: 'Making Comparisons', 
+                content: 'Form the comparative with "-er" and the superlative with "am ...-sten". Some adjectives get an umlaut. Use "als" (than) for comparisons.',
+                questions: [
+                    { id: 'a2l12a1q1', text: 'Berlin ist ___ als Hamburg. (groß)', options: ['größer', 'am größten', 'so groß'], correctAnswer: 'größer' },
+                    { id: 'a2l12a1q2', text: 'Dieser Film ist ___ als der andere. (gut)', options: ['guter', 'besser', 'am besten'], correctAnswer: 'besser' },
+                    { id: 'a2l12a1q3', text: 'Ich laufe schnell, aber du läufst ___.', options: ['schneller', 'am schnellsten', 'schnellsten'], correctAnswer: 'schneller' },
+                    { id: 'a2l12a1q4', text: 'Von allen Städten finde ich Wien ___ . (schön)', options: ['schöner', 'am schönsten', 'schönsten'], correctAnswer: 'am schönsten' },
+                ]
+              },
               {id: 'a2l12a2', type: ActivityType.Conversation, title: 'Comparing Cities', content: 'Compare your hometown to another city you know.'},
           ]},
           { id: 'a2l12b', title: 'Giving Gifts & Thanking', estimatedTime: 20, isCompleted: false, activities: [
@@ -666,11 +893,33 @@ export const MOCK_COURSES: Course[] = [
         progress: 0,
         lessons: [
           { id: 'b1l1', title: 'Narrating Past Events (Präteritum)', estimatedTime: 30, isCompleted: false, activities: [
-              {id: 'b1l1a1', type: ActivityType.Grammar, title: 'The "Präteritum" Tense', content: 'Learn to use the simple past for storytelling, focusing on common irregular verbs.'},
+              {
+                id: 'b1l1a1', 
+                type: ActivityType.Grammar, 
+                title: 'The "Präteritum" Tense', 
+                content: 'The Präteritum is used mainly in written German (novels, news) to describe the past. Practice the forms for strong (irregular) verbs.',
+                questions: [
+                    { id: 'b1l1a1q1', text: 'Als Kind ___ ich oft im Park. (spielen)', options: ['spielte', 'gespielt habe', 'spielte ich'], correctAnswer: 'spielte' },
+                    { id: 'b1l1a1q2', text: 'Er ___ das Buch in einer Stunde. (lesen)', options: ['las', 'gelesen hat', 'liest'], correctAnswer: 'las' },
+                    { id: 'b1l1a1q3', text: 'Wir ___ gestern ins Museum. (gehen)', options: ['gingen', 'gegangen sind', 'gehen'], correctAnswer: 'gingen' },
+                    { id: 'b1l1a1q4', text: 'Sie ___ einen Apfel. (essen)', options: ['aß', 'gegessen hat', 'isst'], correctAnswer: 'aß' },
+                ]
+              },
               {id: 'b1l1a2', type: ActivityType.Conversation, title: 'A Memorable Day', content: 'Tell the AI tutor about a memorable day from your past using the Präteritum.'},
           ]},
           { id: 'b1l2', title: 'Connectors (weil, deshalb, obwohl, trotzdem)', estimatedTime: 30, isCompleted: false, activities: [
-              {id: 'b1l2a1', type: ActivityType.Grammar, title: 'Complex Connectors', content: 'Learn the difference in meaning and sentence structure for "weil", "deshalb", "obwohl", and "trotzdem".'},
+              {
+                id: 'b1l2a1', 
+                type: ActivityType.Grammar, 
+                title: 'Complex Connectors', 
+                content: '"weil" & "obwohl" send the verb to the end. With "deshalb" & "trotzdem", the verb comes right after. Practice choosing the correct structure.',
+                questions: [
+                    { id: 'b1l2a1q1', text: 'Er lernt Deutsch, weil er in Berlin ___.', options: ['wohnt', 'wohnen'], correctAnswer: 'wohnt' },
+                    { id: 'b1l2a1q2', text: 'Es regnet, deshalb ___ ich zu Hause.', options: ['bleibe', 'ich bleibe'], correctAnswer: 'bleibe' },
+                    { id: 'b1l2a1q3', text: 'Sie geht spazieren, obwohl sie ___ ist.', options: ['müde', 'ist müde'], correctAnswer: 'müde' },
+                    { id: 'b1l2a1q4', text: 'Er war krank, trotzdem ___ er zur Arbeit.', options: ['ist gegangen', 'gegangen ist'], correctAnswer: 'ist gegangen' },
+                ]
+              },
               {id: 'b1l2a2', type: ActivityType.Writing, title: 'Combine Sentences', content: 'Practice connecting ideas by combining sentences.'},
           ]},
           { id: 'b1l3', title: 'Debating a Topic', estimatedTime: 35, isCompleted: false, activities: [
@@ -737,7 +986,17 @@ export const MOCK_COURSES: Course[] = [
               {id: 'b1l5a2', type: ActivityType.Reading, title: 'Analyze a Job Ad', content: 'Read a real job advertisement and identify the key requirements.'},
           ]},
           { id: 'b1l6', title: 'The Passive Voice (Passiv)', estimatedTime: 30, isCompleted: false, activities: [
-              {id: 'b1l6a1', type: ActivityType.Grammar, title: 'Forming the Passive', content: 'Learn how to form passive sentences with "werden" and the past participle.'},
+              {
+                id: 'b1l6a1', 
+                type: ActivityType.Grammar, 
+                title: 'Forming the Passive', 
+                content: 'The passive voice focuses on the action, not the person doing it. It\'s formed with "werden" + past participle. The agent can be added with "von" + dative.',
+                questions: [
+                    { id: 'b1l6a1q1', text: 'Das Auto ___ repariert.', options: ['wird', 'ist', 'hat'], correctAnswer: 'wird' },
+                    { id: 'b1l6a1q2', text: 'Der Brief wurde von ___ geschrieben. (ich)', options: ['ich', 'mich', 'mir'], correctAnswer: 'mir' },
+                    { id: 'b1l6a1q3', text: 'Die Fenster müssen ___ werden. (putzen)', options: ['geputzt', 'putzen', 'geputzen'], correctAnswer: 'geputzt' },
+                ]
+              },
               {id: 'b1l6a2', type: ActivityType.Writing, title: 'Active to Passive', content: 'Rewrite active sentences into the passive voice to describe a process.'},
           ]},
           { id: 'b1l6b', title: 'The Job Interview', estimatedTime: 35, isCompleted: false, activities: [
@@ -790,22 +1049,71 @@ export const MOCK_COURSES: Course[] = [
         progress: 0,
         lessons: [
           { id: 'b1l7', title: 'Future Tense (Futur I)', estimatedTime: 25, isCompleted: false, activities: [
-              {id: 'b1l7a1', type: ActivityType.Grammar, title: 'Talking about the Future', content: 'Learn to form the future tense with "werden" + infinitive for predictions and plans.'},
+              {
+                id: 'b1l7a1', 
+                type: ActivityType.Grammar, 
+                title: 'Talking about the Future', 
+                content: 'The Futur I is formed with "werden" + infinitive verb. It\'s used for predictions, assumptions, or firm plans. Note: for scheduled plans, Germans often use the present tense with a time expression.',
+                questions: [
+                    { id: 'b1l7a1q1', text: 'Es ___ morgen regnen.', options: ['wird', 'werde', 'wirst'], correctAnswer: 'wird' },
+                    { id: 'b1l7a1q2', text: 'Ich ___ dich am Bahnhof abholen.', options: ['werde', 'wird', 'wirst'], correctAnswer: 'werde' },
+                    { id: 'b1l7a1q3', text: 'Wir werden das Projekt bis Freitag ___.', options: ['beenden', 'beendet'], correctAnswer: 'beenden' },
+                ]
+              },
               {id: 'b1l7a2', type: ActivityType.Conversation, title: 'Your Future Plans', content: 'Discuss your plans for the next five years with the AI tutor.'},
           ]},
           { id: 'b1l8', title: 'Subjunctive II (Konjunktiv II)', estimatedTime: 35, isCompleted: false, activities: [
-              {id: 'b1l8a1', type: ActivityType.Grammar, title: 'Wishes, Advice, Polite Requests', content: 'Learn how to use "würde", "könnte", "sollte".'},
-              {id: 'b1l8a2', type: ActivityType.Grammar, title: 'Forms of "haben" and "sein"', content: 'Learn the Konjunktiv II forms "hätte" and "wäre".'},
+              {
+                id: 'b1l8a1', 
+                type: ActivityType.Grammar, 
+                title: 'Wishes, Advice, Polite Requests', 
+                content: 'Konjunktiv II is for hypotheticals. "könnte" (could), "sollte" (should), and "würde" + infinitive are common forms.',
+                questions: [
+                    { id: 'b1l8a1q1', text: 'Ich ___ gern einen Kaffee bestellen.', options: ['würde', 'werde', 'wäre'], correctAnswer: 'würde' },
+                    { id: 'b1l8a1q2', text: 'Du ___ mehr lernen.', options: ['solltest', 'könntest', 'würdest'], correctAnswer: 'solltest' },
+                    { id: 'b1l8a1q3', text: 'An deiner Stelle ___ ich das nicht tun.', options: ['würde', 'sollte', 'könnte'], correctAnswer: 'würde' },
+                ]
+              },
+              {
+                id: 'b1l8a2', 
+                type: ActivityType.Grammar, 
+                title: 'Forms of "haben" and "sein"', 
+                content: '"haben" and "sein" have their own special Konjunktiv II forms: "hätte" (would have) and "wäre" (would be).',
+                questions: [
+                    { id: 'b1l8a2q1', text: 'Wenn ich Zeit ___, würde ich reisen.', options: ['hätte', 'wäre', 'habe'], correctAnswer: 'hätte' },
+                    { id: 'b1l8a2q2', text: 'Ich ___ jetzt gern am Strand.', options: ['hätte', 'wäre', 'bin'], correctAnswer: 'wäre' },
+                    { id: 'b1l8a2q3', text: 'Wenn ich du ___, würde ich das Angebot annehmen.', options: ['hätte', 'wäre', 'bin'], correctAnswer: 'wäre' },
+                ]
+              },
               {id: 'b1l8a3', type: ActivityType.Conversation, title: 'Giving Advice', content: 'Give advice to a friend in a roleplay scenario.'},
           ]},
           { id: 'b1l9', title: 'Genitive Case', estimatedTime: 25, isCompleted: false, activities: [
-              {id: 'b1l9a1', type: ActivityType.Grammar, title: 'Showing Possession', content: 'Learn to form and use the genitive case (e.g., "das Auto meines Vaters").'},
+              {
+                id: 'b1l9a1', 
+                type: ActivityType.Grammar, 
+                title: 'Showing Possession', 
+                content: 'The genitive case expresses possession. Masculine/neuter articles are "des/eines" (+ noun ending -s/-es). Feminine/plural articles are "der/einer".',
+                questions: [
+                    { id: 'b1l9a1q1', text: 'Das ist das Auto ___ Vaters. (der)', options: ['des', 'dem', 'den'], correctAnswer: 'des' },
+                    { id: 'b1l9a1q2', text: 'Die Farbe ___ Hauses ist weiß. (das)', options: ['des', 'dem', 'das'], correctAnswer: 'des' },
+                    { id: 'b1l9a1q3', text: 'Die Tasche ___ Frau ist neu. (die)', options: ['der', 'die', 'den'], correctAnswer: 'der' },
+                ]
+              },
               {id: 'b1l9a2', type: ActivityType.Writing, title: 'Practice Possession', content: 'Write sentences using the genitive case.'},
           ]},
           { id: 'b1l9b', title: 'Conditional Sentences (Wenn-Sätze)', estimatedTime: 30, isCompleted: false, activities: [
-              {id: 'b1l9b1', type: ActivityType.Grammar, title: 'Real Conditions', content: 'Learn to form real conditional sentences (If X happens, Y happens).'},
-              {id: 'b1l9b2', type: ActivityType.Grammar, title: 'Unreal Conditions', content: 'Learn to form unreal conditional sentences using Konjunktiv II (If X happened, Y would happen).'},
-              {id: 'b1l9b3', type: ActivityType.Conversation, title: 'What would you do?', content: 'Answer hypothetical questions like "Was würdest du mit einer Million Euro machen?"'},
+              {
+                id: 'b1l9b1', 
+                type: ActivityType.Grammar, 
+                title: 'Real & Unreal Conditions', 
+                content: 'Unreal or hypothetical conditions use "wenn" + Konjunktiv II. The structure is often: "Wenn" + subject + [Konjunktiv II form], main clause with "würde" + infinitive.',
+                questions: [
+                    { id: 'b1l9b1q1', text: 'Wenn ich Zeit habe, ___ ich dich.', options: ['besuche', 'würde besuchen'], correctAnswer: 'besuche' },
+                    { id: 'b1l9b1q2', text: 'Wenn ich Zeit hätte, ___ ich dich besuchen.', options: ['besuche', 'würde'], correctAnswer: 'würde' },
+                    { id: 'b1l9b1q3', text: 'Wenn er reich wäre, ___ er ein Haus kaufen.', options: ['würde', 'wird', 'hat'], correctAnswer: 'würde' },
+                ]
+              },
+              {id: 'b1l9b2', type: ActivityType.Conversation, title: 'What would you do?', content: 'Answer hypothetical questions like "Was würdest du mit einer Million Euro machen?"'},
           ]},
           {
             id: 'b1m3-test',
@@ -862,7 +1170,18 @@ export const MOCK_COURSES: Course[] = [
               {id: 'b1l11a2', type: ActivityType.Reading, title: 'An Article on Sustainability', content: 'Read a short article about what individuals can do to be more environmentally friendly.'},
           ]},
           { id: 'b1l12', title: 'Relative Clauses', estimatedTime: 35, isCompleted: false, activities: [
-              {id: 'b1l12a1', type: ActivityType.Grammar, title: 'Adding Information', content: 'Learn how to use relative clauses (der, die, das) to combine sentences and provide more detail.'},
+              {
+                id: 'b1l12a1', 
+                type: ActivityType.Grammar, 
+                title: 'Adding Information', 
+                content: 'A relative clause gives more information about a noun. It starts with a relative pronoun (der, die, das, etc.) which agrees with the noun. The verb in a relative clause always goes to the end.',
+                questions: [
+                    { id: 'b1l12a1q1', text: 'Das ist der Mann, ___ in Berlin wohnt.', options: ['der', 'dem', 'den'], correctAnswer: 'der' },
+                    { id: 'b1l12a1q2', text: 'Hier ist der Kuchen, ___ ich gebacken habe.', options: ['der', 'dem', 'den'], correctAnswer: 'den' },
+                    { id: 'b1l12a1q3', text: 'Das ist die Frau, ___ ich helfe.', options: ['die', 'der', 'den'], correctAnswer: 'der' },
+                    { id: 'b1l12a1q4', text: 'Wo ist das Buch, ___ auf dem Tisch lag?', options: ['das', 'dem', 'dessen'], correctAnswer: 'das' },
+                ]
+              },
               {id: 'b1l12a2', type: ActivityType.Writing, title: 'Describe a Place', content: 'Write a detailed description of your favorite place using relative clauses.'},
           ]},
            { id: 'b1l12b', title: 'The Digital World', estimatedTime: 30, isCompleted: false, activities: [
@@ -961,7 +1280,17 @@ export const MOCK_COURSES: Course[] = [
               {id: 'b2l1a2', type: ActivityType.Listening, title: 'Listen to the News', content: 'Listen to a short, authentic news report and summarize the main points.'},
           ]},
           { id: 'b2l2', title: 'Advanced Subjunctive II (Konjunktiv II)', estimatedTime: 30, isCompleted: false, activities: [
-              {id: 'b2l2a1', type: ActivityType.Grammar, title: 'Unreal Conditions', content: 'Master the Konjunktiv II in the past (hätte, wäre + Partizip II) to talk about unreal past situations.'},
+              {
+                id: 'b2l2a1', 
+                type: ActivityType.Grammar, 
+                title: 'Unreal Past Conditions', 
+                content: 'To talk about what "would have" happened differently in the past, use the Konjunktiv II Perfekt: "hätte" or "wäre" + past participle.',
+                questions: [
+                    { id: 'b2l2a1q1', text: 'Wenn ich mehr gelernt ___, ___ ich die Prüfung bestanden.', options: ['hätte / hätte', 'wäre / wäre', 'hätte / wäre'], correctAnswer: 'hätte / hätte' },
+                    { id: 'b2l2a1q2', text: '___ er schneller gefahren, ___ er pünktlich angekommen.', options: ['Wäre / wäre', 'Hätte / wäre', 'Wäre / hätte'], correctAnswer: 'Wäre / wäre' },
+                    { id: 'b2l2a1q3', text: 'Ich ___ dich angerufen, wenn ich dein Handy gefunden ___.', options: ['hätte / hätte', 'wäre / hätte', 'hätte / wäre'], correctAnswer: 'hätte / hätte' },
+                ]
+              },
               {id: 'b2l2a2', type: ActivityType.Conversation, title: 'What if...?', content: 'Discuss hypothetical past scenarios, e.g., "What would have happened if...?".'},
           ]},
           { id: 'b2l3', title: 'Arguing a Point and Defending an Opinion', estimatedTime: 40, isCompleted: false, activities: [
@@ -1026,7 +1355,18 @@ export const MOCK_COURSES: Course[] = [
               {id: 'b2l5a2', type: ActivityType.Conversation, title: 'Practice Your Speech', content: 'Practice giving a short presentation on a topic of your choice.'},
           ]},
           { id: 'b2l6', title: 'Advanced Relative Clauses', estimatedTime: 30, isCompleted: false, activities: [
-              {id: 'b2l6a1', type: ActivityType.Grammar, title: 'Relative Clauses with Prepositions & "wo(r)"-compounds', content: 'Master relative pronouns in all cases and learn to use them with prepositions (z.B. der Mann, mit dem...).'},
+              {
+                id: 'b2l6a1', 
+                type: ActivityType.Grammar, 
+                title: 'Relative Clauses with Prepositions', 
+                content: 'When a verb in a relative clause needs a preposition, it comes before the relative pronoun. For things, you can use wo-compounds (worüber, womit etc.).',
+                questions: [
+                    { id: 'b2l6a1q1', text: 'Das ist der Kollege, mit ___ ich arbeite.', options: ['der', 'dem', 'den'], correctAnswer: 'dem' },
+                    { id: 'b2l6a1q2', text: 'Das ist das Thema, über ___ wir sprechen.', options: ['das', 'dem', 'dessen'], correctAnswer: 'das' },
+                    { id: 'b2l6a1q3', text: 'Das ist das Thema, ___ wir sprechen.', options: ['worüber', 'über das', 'Beide sind korrekt'], correctAnswer: 'Beide sind korrekt' },
+                    { id: 'b2l6a1q4', text: 'Zeig mir das Werkzeug, mit ___ du das repariert hast.', options: ['was', 'das', 'dem'], correctAnswer: 'dem' },
+                ]
+              },
               {id: 'b2l6a2', type: ActivityType.Writing, title: 'Sentence Building', content: 'Combine sentences using complex relative clauses.'},
           ]},
           { id: 'b2l6b', title: 'Social and Political Structures', estimatedTime: 35, isCompleted: false, activities: [
@@ -1078,20 +1418,68 @@ export const MOCK_COURSES: Course[] = [
         progress: 0,
         lessons: [
            { id: 'b2l7', title: 'Nominalization', estimatedTime: 30, isCompleted: false, activities: [
-              {id: 'b2l7a1', type: ActivityType.Grammar, title: 'Turning Actions into Nouns', content: 'Learn how to create nouns from verbs (das Rauchen) and adjectives (das Schöne) to create a more formal style.'},
+              {
+                id: 'b2l7a1', 
+                type: ActivityType.Grammar, 
+                title: 'Turning Actions into Nouns', 
+                content: 'Nominalization makes language more formal/academic. To nominalize a verb, capitalize its infinitive form (it becomes a neuter noun).',
+                questions: [
+                    { id: 'b2l7a1q1', text: '"Er liest gern." can be nominalized to: "___ macht ihm Spaß."', options: ['Das Lesen', 'Der Leser', 'Das Gelesene'], correctAnswer: 'Das Lesen' },
+                    { id: 'b2l7a1q2', text: '"Man muss vorsichtig fahren." can be nominalized to: "___ ist wichtig."', options: ['Das Fahren', 'Die Fahrt', 'Der Fahrer'], correctAnswer: 'Das Fahren' },
+                ]
+              },
               {id: 'b2l7a2', type: ActivityType.Writing, title: 'Formal Writing Style', content: 'Rewrite sentences to sound more formal and academic using nominalization.'},
           ]},
            { id: 'b2l8', title: 'Subjunctive I (Konjunktiv I)', estimatedTime: 25, isCompleted: false, activities: [
-              {id: 'b2l8a1', type: ActivityType.Grammar, title: 'Indirect Speech', content: 'Learn to report what others have said, a key feature of news articles and formal texts.'},
+              {
+                id: 'b2l8a1', 
+                type: ActivityType.Grammar, 
+                title: 'Indirect Speech', 
+                content: 'Konjunktiv I is used to report speech indirectly, mainly in news reports. It is formed from the infinitive stem + Konjunktiv endings (-e, -est, -e, -en, -et, -en).',
+                questions: [
+                    { id: 'b2l8a1q1', text: 'Direct: "Ich gehe." -> Indirect: "Er sagt, er ___."', options: ['gehe', 'ginge', 'geht'], correctAnswer: 'gehe' },
+                    { id: 'b2l8a1q2', text: 'Direct: "Wir haben Zeit." -> Indirect: "Sie sagen, sie ___ Zeit."', options: ['hätten', 'haben', 'hätten'], correctAnswer: 'hätten' },
+                    { id: 'b2l8a1q3', text: 'Direct: "Du bist krank." -> Indirect: "Er meint, ich ___ krank."', options: ['sei', 'wäre', 'bin'], correctAnswer: 'sei' },
+                ]
+              },
               {id: 'b2l8a2', type: ActivityType.Reading, title: 'Analyze a News Article', content: 'Read an article and identify all instances of indirect speech.'},
           ]},
            { id: 'b2l9', title: 'N-Declension', estimatedTime: 20, isCompleted: false, activities: [
-              {id: 'b2l9a1', type: ActivityType.Grammar, title: 'Weak Masculine Nouns', content: 'Master the n-declension for nouns like "der Junge", "der Kollege", "der Präsident".'},
+              {
+                id: 'b2l9a1', 
+                type: ActivityType.Grammar, 
+                title: 'Weak Masculine Nouns', 
+                content: 'A small group of masculine nouns are "weak" and add an "-(e)n" ending in every case except the nominative singular.',
+                questions: [
+                    { id: 'b2l9a1q1', text: 'Ich sehe de_ Junge_.', options: ['n / n', 'n / s', 'm / n'], correctAnswer: 'n / n' },
+                    { id: 'b2l9a1q2', text: 'Das ist das Buch des Kollege_.', options: ['n', 's', 'en'], correctAnswer: 'n' },
+                    { id: 'b2l9a1q3', text: 'Er spricht mit dem Herr_.', options: ['n', 's', 'en'], correctAnswer: 'n' },
+                ]
+              },
               {id: 'b2l9a2', type: ActivityType.Writing, title: 'Practice with N-Declension', content: 'Fill in the blanks in sentences with the correct noun endings.'},
           ]},
            { id: 'b2l9b', title: 'Advanced Connectors', estimatedTime: 30, isCompleted: false, activities: [
-              {id: 'b2l9b1', type: ActivityType.Grammar, title: 'Double Connectors', content: 'Learn connectors like "entweder...oder", "sowohl...als auch", "weder...noch".'},
-              {id: 'b2l9b2', type: ActivityType.Grammar, title: 'Comparative Clauses with "je...desto"', content: 'Learn to express "the more... the more..." (Je mehr man lernt, desto besser spricht man.).'},
+              {
+                id: 'b2l9b1', 
+                type: ActivityType.Grammar, 
+                title: 'Double Connectors', 
+                content: '"entweder...oder" (either...or), "sowohl...als auch" (both...and), "weder...noch" (neither...nor).',
+                questions: [
+                    { id: 'b2l9b1q1', text: 'Wir können ___ ins Kino ___ ins Theater gehen.', options: ['entweder / oder', 'sowohl / als auch', 'weder / noch'], correctAnswer: 'entweder / oder' },
+                    { id: 'b2l9b1q2', text: 'Er mag ___ Fisch ___ Fleisch.', options: ['entweder / oder', 'sowohl / als auch', 'weder / noch'], correctAnswer: 'weder / noch' },
+                    { id: 'b2l9b1q3', text: 'Sie spricht ___ Deutsch ___ auch Englisch.', options: ['entweder', 'sowohl', 'weder'], correctAnswer: 'sowohl' },
+                ]
+              },
+              {
+                id: 'b2l9b2', 
+                type: ActivityType.Grammar, 
+                title: 'Comparative Clauses with "je...desto"', 
+                content: 'This structure shows a proportional relationship: Je + comparative ..., desto + comparative + verb ...',
+                questions: [
+                    { id: 'b2l9b2q1', text: '___ mehr man lernt, ___ besser spricht man.', options: ['Je / desto', 'Desto / je', 'Wenn / dann'], correctAnswer: 'Je / desto' },
+                    { id: 'b2l9b2q2', text: 'Je länger er wartet, desto ___ wird er.', options: ['ungeduldiger', 'ungeduldig'], correctAnswer: 'ungeduldiger' },
+                ]
+              },
               {id: 'b2l9b3', type: ActivityType.Writing, title: 'Practice Advanced Sentences', content: 'Write sentences using the new advanced connectors.'},
           ]},
           {
@@ -1149,7 +1537,18 @@ export const MOCK_COURSES: Course[] = [
               {id: 'b2l11a2', type: ActivityType.Reading, title: 'A University Website', content: 'Explore the website of a German university and understand the study programs offered.'},
           ]},
            { id: 'b2l12', title: 'Participles as Adjectives', estimatedTime: 30, isCompleted: false, activities: [
-              {id: 'b2l12a1', type: ActivityType.Grammar, title: 'Describing with Participles', content: 'Learn how to use Partizip I (der lesende Mann) and Partizip II (das gelesene Buch) as adjectives for a more sophisticated style.'},
+              {
+                id: 'b2l12a1', 
+                type: ActivityType.Grammar, 
+                title: 'Describing with Participles', 
+                content: 'Participles can be used as adjectives. Partizip I (verb + -d) has an active meaning (the barking dog). Partizip II (past participle) usually has a passive meaning (the stolen car).',
+                questions: [
+                    { id: 'b2l12a1q1', text: 'Der ___ Hund ist laut. (bellen)', options: ['bellende', 'gebellte', 'bellend'], correctAnswer: 'bellende' },
+                    { id: 'b2l12a1q2', text: 'Das ___ Auto wurde gefunden. (stehlen)', options: ['stehlende', 'gestohlene', 'gestohlen'], correctAnswer: 'gestohlene' },
+                    { id: 'b2l12a1q3', text: 'Die ___ Sonne scheint. (lachen)', options: ['lachende', 'gelachte', 'lachend'], correctAnswer: 'lachende' },
+                    { id: 'b2l12a1q4', text: 'Bitte lies den ___ Text. (drucken)', options: ['druckende', 'gedruckte', 'gedrucken'], correctAnswer: 'gedruckte' },
+                ]
+              },
               {id: 'b2l12a2', type: ActivityType.Writing, title: 'Advanced Descriptions', content: 'Rewrite simple sentences using participial adjectives.'},
           ]},
            { id: 'b2l12b', title: 'Writing a CV and Cover Letter', estimatedTime: 35, isCompleted: false, activities: [
