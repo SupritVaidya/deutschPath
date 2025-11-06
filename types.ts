@@ -8,7 +8,7 @@ export interface User {
   goals: string[];
 }
 
-export type CEFRLevel = 'A1' | 'A2' | 'B1' | 'B2' | 'C1' | 'C2';
+export type CEFRLevel = 'A1' | 'A2' | 'B1' | 'B2' | 'C1' | 'C2' | 'G-A1' | 'G-A2' | 'G-B1' | 'G-B2' | 'G-C1' | 'G-C2';
 
 export interface Course {
   id: string;

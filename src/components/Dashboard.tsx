@@ -65,8 +65,11 @@ const Dashboard: React.FC<DashboardProps> = ({ user, courses, onSelectCourse }) 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {courses.map((course, index) => {
           const isLocked = false;
-          // Use levelProgress for this course's progress if available
-          const progress = levelProgress[course.level.toLowerCase()] ?? 0;
+          // Use levelProgress for this course's progress if available (by level, lowercased)
+          let progress = levelProgress[course.level.toLowerCase()] ?? 0;
+          // If the value is a fraction (0-1), convert to percentage
+          if (progress > 0 && progress <= 1) progress = progress * 100;
+          console.log('Course:', course.level, 'Progress:', progress);
           return (
             <CourseCard 
               key={course.id} 

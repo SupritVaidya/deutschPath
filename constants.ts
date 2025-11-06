@@ -1678,7 +1678,7 @@ export const generateInitialUserProgress = (): UserProgressDB => {
 export const GOETHE_DATA = {
   levels: [
     {
-      level: 'A1' as CEFRLevel,
+      level: 'G-A1' as CEFRLevel,
       title: 'Goethe-Zertifikat A1: Start Deutsch 1',
       description: 'Trainieren Sie für die A1-Prüfung mit 5 kompletten Modelltests, die alle Teile abdecken: Hören, Lesen, Schreiben und Sprechen.',
       lessons: [
@@ -4007,7 +4007,7 @@ export const GOETHE_DATA = {
       ]
     },
     {
-      level: 'A2' as CEFRLevel,
+      level: 'G-A2' as CEFRLevel,
       title: 'Goethe-Zertifikat A2',
       description: 'Trainieren Sie für die A2-Prüfung mit 5 kompletten Modelltests.',
       lessons: [
@@ -5378,13 +5378,12 @@ export const GOETHE_DATA = {
       ]
     },
     {
-      level: 'B1' as CEFRLevel,
+      level: 'G-B1' as CEFRLevel,
       title: 'Goethe-Zertifikat B1',
       description: 'Trainieren Sie für die B1-Prüfung mit 5 kompletten Modelltests.',
       lessons: [
         
-        
-{
+        {
           id: 'g-b1-l1',
           title: 'Modelltest 1: Gesamte Prüfung',
           estimatedTime: 165, // B1 exam is much longer
@@ -6971,7 +6970,7 @@ export const GOETHE_DATA = {
       ]
     },
     {
-      level: 'B2' as CEFRLevel,
+      level: 'G-B2' as CEFRLevel,
       title: 'Goethe-Zertifikat B2',
       description: 'Trainieren Sie für die B2-Prüfung mit 5 kompletten Modelltests.',
       lessons: [
