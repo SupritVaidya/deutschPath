@@ -72,7 +72,7 @@ export const getAIAssistantResponse = async (
   
   try {
     const response = await ai.models.generateContent({
-        model: "gemini-2.5-pro",
+        model: "gemini-2.5-flash",
         contents: [
             ...messageHistory,
             { role: 'user', parts: [{ text: userMessage }] }
@@ -81,7 +81,7 @@ export const getAIAssistantResponse = async (
             systemInstruction: systemInstruction,
             temperature: 0.5,
             thinkingConfig: {
-                thinkingBudget: 32768,
+                thinkingBudget: 13000,
             }
         },
     });
