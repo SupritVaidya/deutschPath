@@ -33,3 +33,4 @@ publish/
 dist/
 .env
 .env.*
+.env.production
