@@ -11,7 +11,7 @@
     <WebStackScaffolding_LayoutPageFile />
     <WebStackScaffolding_DbContextTypeFullName>DeutschPath.Models.DeutschPathDbContext</WebStackScaffolding_DbContextTypeFullName>
     <WebStackScaffolding_IsAsyncSelected>False</WebStackScaffolding_IsAsyncSelected>
-    <NameOfLastUsedPublishProfile>C:\Suprit\deutsch_path\deutschpath_-adaptive-german-learning\backend\DeutschPath\Properties\PublishProfiles\site46760-WebDeploy.pubxml</NameOfLastUsedPublishProfile>
+    <NameOfLastUsedPublishProfile>C:\Suprit\deutsch_path\deutschpath_-adaptive-german-learning\backend\DeutschPath\Properties\PublishProfiles\site46763-WebDeploy.pubxml</NameOfLastUsedPublishProfile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DebuggerFlavor>ProjectDebugger</DebuggerFlavor>
