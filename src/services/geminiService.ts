@@ -131,7 +131,7 @@ export const evaluateWriting = async (
   level: CEFRLevel,
   topic: string
 ): Promise<{ feedback: string; correction: string; rating: string } | null> => {
-  const apiKey = process.env.API_KEY;
+  const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
   if (!apiKey) {
     console.warn("API_KEY is not set. Using mock evaluation.");
     return new Promise(resolve => setTimeout(() => resolve({
