@@ -1,6 +1,6 @@
 
-import { GoogleGenAI, Modality } from "@google/genai";
-import { CEFRLevel } from "../types";
+import { GoogleGenAI, Modality, Type } from "@google/genai";
+import { CEFRLevel } from "../../types";
 
 const getAIResponse = async (
   messageHistory: { role: 'user' | 'model'; parts: { text: string }[] }[],
@@ -126,5 +126,55 @@ export const generateSpeech = async (text: string): Promise<string | null> => {
     }
 };
 
+export const evaluateWriting = async (
+  text: string,
+  level: CEFRLevel,
+  topic: string
+): Promise<{ feedback: string; correction: string; rating: string } | null> => {
+  const apiKey = process.env.API_KEY;
+  if (!apiKey) {
+    console.warn("API_KEY is not set. Using mock evaluation.");
+    return new Promise(resolve => setTimeout(() => resolve({
+      feedback: "This is a mock evaluation because no API key is set. In a real scenario, the AI would correct your grammar and vocabulary.",
+      correction: "Dies ist eine Testkorrektur.",
+      rating: "Good practice!"
+    }), 1500));
+  }
+
+  const ai = new GoogleGenAI({ apiKey });
+
+  const prompt = `Evaluate this German writing submission from a student at CEFR level ${level}.
+  Topic: ${topic}
+  Student Text: "${text}"
+
+  Provide:
+  1. A corrected version of the text in German.
+  2. Specific feedback on grammar and vocabulary in English.
+  3. A short encouraging rating/comment.
+  `;
+
+  try {
+    const response = await ai.models.generateContent({
+        model: "gemini-2.5-flash",
+        contents: prompt,
+        config: {
+            responseMimeType: "application/json",
+            responseSchema: {
+                type: Type.OBJECT,
+                properties: {
+                    correction: { type: Type.STRING },
+                    feedback: { type: Type.STRING },
+                    rating: { type: Type.STRING }
+                }
+            }
+        },
+    });
+
+    return JSON.parse(response.text);
+  } catch (error) {
+    console.error("Error evaluating writing:", error);
+    return null;
+  }
+};
 
 export default getAIResponse;

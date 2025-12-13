@@ -1,5 +1,6 @@
 import React, { useState, useMemo, useRef } from 'react';
 import { Lesson, Activity, ActivityType, CEFRLevel } from '../../types';
+import { evaluateWriting } from '../services/geminiService';
 // --- TYPE DEFINITIONS (from types.ts) ---
 
 
@@ -121,7 +122,14 @@ interface LessonViewProps {
 }
 
 
-const ActivityCard: React.FC<{ activity: Activity; onStartPractice: (topic: string) => void; onCompleteActivity: (activityId: string) => void; }> = ({ activity, onStartPractice, onCompleteActivity }) => {
+interface ActivityCardProps {
+  activity: Activity;
+  onStartPractice: (topic: string) => void;
+  onCompleteActivity: (activityId: string) => void;
+  courseLevel: CEFRLevel;
+}
+
+const ActivityCard: React.FC<ActivityCardProps> = ({ activity, onStartPractice, onCompleteActivity, courseLevel }) => {
   const [showTranslation, setShowTranslation] = useState(false);
   const isConversation = activity.type === ActivityType.Conversation;
   const isListeningActivity = activity.type === ActivityType.Listening;
@@ -132,6 +140,17 @@ const ActivityCard: React.FC<{ activity: Activity; onStartPractice: (topic: stri
 
   const [selectedAnswers, setSelectedAnswers] = useState<Record<string, string>>({});
   const [showQuizResults, setShowQuizResults] = useState(activity.isCompleted || false);
+
+  // --- Writing state ---
+const [writingSubmission, setWritingSubmission] = useState('');
+const [isWritingSubmitted, setIsWritingSubmitted] = useState(activity.isCompleted || false);
+const [isEvaluating, setIsEvaluating] = useState(false);
+const [evaluation, setEvaluation] = useState<{
+  feedback: string;
+  correction: string;
+  rating: string;
+} | null>(null);
+
 
   // TTS for dialogue
   const [isPlaying, setIsPlaying] = useState(false);
@@ -184,6 +203,30 @@ const ActivityCard: React.FC<{ activity: Activity; onStartPractice: (topic: stri
         onCompleteActivity(activity.id);
     }
   };
+
+  const handleWritingSubmit = async () => {
+  if (!writingSubmission.trim()) return;
+
+  setIsEvaluating(true);
+
+  try {
+    const result = await evaluateWriting(
+      writingSubmission,
+      courseLevel,
+      activity.title
+    );
+
+    setEvaluation(result);
+    setIsWritingSubmitted(true);
+
+    if (!activity.isCompleted) {
+      onCompleteActivity(activity.id);
+    }
+  } finally {
+    setIsEvaluating(false);
+  }
+};
+
 
   const score = useMemo(() => {
     if (!hasQuiz || !activity.questions) return 0;
@@ -343,6 +386,53 @@ const ActivityCard: React.FC<{ activity: Activity; onStartPractice: (topic: stri
         </div>
       )}
       {/* --- END OF QUIZ SECTION --- */}
+      {/* --- Writing Section --- */}
+      {activity.type === ActivityType.Writing && (
+        <div className="pt-2 space-y-3">
+          <textarea
+            className="w-full h-32 p-3 bg-base-200 border border-base-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary disabled:bg-base-300/50"
+            placeholder="Schreiben Sie hier Ihren Text..."
+            value={writingSubmission}
+            onChange={(e) => setWritingSubmission(e.target.value)}
+            disabled={isWritingSubmitted}
+          />
+
+          {isEvaluating ? (
+            <div className="flex items-center gap-2 text-primary">
+              <Loader2Icon className="h-5 w-5 animate-spin" />
+              <span>Evaluating your writing...</span>
+            </div>
+          ) : !isWritingSubmitted ? (
+            <button
+              onClick={handleWritingSubmit}
+              disabled={!writingSubmission.trim()}
+              className="bg-primary hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition-colors disabled:bg-gray-400"
+            >
+              Submit Writing
+            </button>
+          ) : (
+            evaluation && (
+              <div className="bg-base-200 p-4 rounded-lg space-y-3">
+                <div>
+                  <span className="font-semibold text-sm text-text-secondary">Correction:</span>
+                  <p className="mt-1 p-2 bg-base-100 rounded">{evaluation.correction}</p>
+                </div>
+
+                <div>
+                  <span className="font-semibold text-sm text-text-secondary">Feedback:</span>
+                  <p className="mt-1">{evaluation.feedback}</p>
+                </div>
+
+                <div className="flex items-center gap-2 pt-2 border-t border-base-300">
+                  <span className="font-semibold text-text-secondary">Rating:</span>
+                  <span className="font-bold text-primary">{evaluation.rating}</span>
+                </div>
+              </div>
+            )
+          )}
+        </div>
+      )}
+
 
 
       {isConversation && (
@@ -440,6 +530,7 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, courseLevel, onBack, on
                 activity={activity} 
                 onStartPractice={handleStartPractice}
                 onCompleteActivity={onCompleteActivity}
+                courseLevel={courseLevel}
               />
             ))
         )}
