@@ -1,4 +1,4 @@
-// Program.cs
+
 using System.Text;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -6,15 +6,22 @@ using Microsoft.IdentityModel.Tokens;
 using DeutschPath.Models;
 using DeutschPath.Services;
 
+// Load environment variables from .env file (requires DotNetEnv NuGet package)
+DotNetEnv.Env.Load();
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Force listening URL (HTTPS only) — dev only
-// Note: Ensure dev cert is trusted (dotnet dev-certs https --trust)
+// Force listening URL (HTTPS only) â€” dev only
 builder.WebHost.UseUrls("https://localhost:7114");
 
-// DbContext (reads DefaultConnection from appsettings.json)
+// Prefer environment variable, fallback to appsettings.json
+var connectionString = Environment.GetEnvironmentVariable("ConnectionStrings__DefaultConnection")
+    ?? builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<DeutschPathDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(connectionString, sqlOptions =>
+        sqlOptions.EnableRetryOnFailure()
+    )
+);
 
 // CORS: allow only the single dev origin for HTTPS 7114
 builder.Services.AddCors(options =>
@@ -22,19 +29,16 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowDevFrontends", policy =>
     {
         policy.WithOrigins(
-            "https://localhost:7114",   // backend swagger / https
-            "http://localhost:3000",    // React (create-react-app) dev server
-            "http://localhost:5173",    // Vite dev server (if you use it)
+            "https://localhost:7114",
+            "http://localhost:3000",
+            "http://localhost:5173",
             "https://localhost:3000",
             "https://localhost:5173"
         )
         .AllowAnyHeader()
         .AllowAnyMethod()
-        .AllowCredentials(); // keep if you need cookies; remove if not
+        .AllowCredentials();
     });
-
-
-    // production policy (GitHub pages) — keep as-is
     options.AddPolicy("AllowGithubPages", policy =>
     {
         policy.WithOrigins("https://supritvaidya.github.io")
@@ -46,8 +50,6 @@ builder.Services.AddCors(options =>
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
-// Register AuthService
 builder.Services.AddScoped<IAuthService, AuthService>();
 
 // JWT config
@@ -66,7 +68,7 @@ builder.Services.AddAuthentication(options =>
 })
 .AddJwtBearer(options =>
 {
-    options.RequireHttpsMetadata = false; // set to true in production
+    options.RequireHttpsMetadata = false;
     options.SaveToken = true;
     options.TokenValidationParameters = new TokenValidationParameters
     {
@@ -82,15 +84,11 @@ builder.Services.AddAuthentication(options =>
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 
-// Apply the single dev CORS policy in development, production uses GitHub policy
 if (app.Environment.IsDevelopment())
 {
     app.UseCors("AllowDevFrontends");
@@ -109,15 +107,11 @@ app.MapControllers();
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<DeutschPathDbContext>();
-
-    // Replace this email with the email you tried to log in with:
     var emailToSet = "alex.meier@example.com";
-    var plainPassword = "password123"; // the password you will test with
-
-    var user = db.Users.SingleOrDefault(u => u.Email.ToLower() == emailToSet.ToLower());
+    var plainPassword = "password123";
+    var user = db.Users.SingleOrDefault(u => EF.Functions.Like(u.Email, emailToSet));
     if (user == null)
     {
-        // create a new user with the password
         var hash = BCrypt.Net.BCrypt.HashPassword(plainPassword);
         db.Users.Add(new DeutschPath.Models.User
         {
@@ -133,7 +127,6 @@ using (var scope = app.Services.CreateScope())
     }
     else
     {
-        // update existing user's password to the known hash
         user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(plainPassword);
         db.SaveChanges();
         Console.WriteLine($"Updated password for {emailToSet} to: {plainPassword}");
